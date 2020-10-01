@@ -1,4 +1,4 @@
-Step 1-	install latest python on your computer and add path to encviorment variable
+Step 1-	install latest python on your computer and add path to environment variable
 	sample path -  C:\Users\username\AppData\Local\Programs\Python\Python38
 
 Step 2-	then set a new enviorment path to use pip
