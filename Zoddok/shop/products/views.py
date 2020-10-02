@@ -39,6 +39,14 @@ def check_user_has_prodcut_in_favorites(request,product):
         liked=False
     return liked
 
+def check_list_of_prodcut_favorite(request,liked,product_list):
+    liked=liked
+    for p in product_list:
+        like=check_user_has_prodcut_in_favorites(request,p)
+        if like and p.id not in liked:
+            liked[p.id]=like
+    return liked
+
 def product_detail(request,id,slug):
     query = request.GET.get('q')
     try:
@@ -160,12 +168,7 @@ def category(request,slug):
             product_list = paginator.page(1)
         except EmptyPage:
             product_list = paginator.page(paginator.num_pages)
-
-        for p in product_list:
-            like=check_user_has_prodcut_in_favorites(request,p)
-            if like:
-                liked[p.id]=like
-
+        liked=check_list_of_prodcut_favorite(request,liked,product_list)
         data_sended='Products'
     
     context={

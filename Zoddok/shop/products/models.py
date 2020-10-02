@@ -12,11 +12,16 @@ class Category(MPTTModel):
         ('True','True'),
         ('False','False'),
     )
+    FEATURE=(
+        ('Yes','Yes'),
+        ('No','No'),
+    )
     title = models.CharField(max_length=50)
     description=models.CharField(max_length=255,unique=True)
     meta_description=models.TextField(null=True,blank=True)
     meta_keywords=models.TextField(null=True,blank=True)
     status=models.CharField(max_length=10,choices=STATUS)
+    feature_to_home_page=models.CharField(max_length=10,choices=FEATURE,default='No')
     image=models.ImageField(blank=True,upload_to='img/')
     create_at=models.DateTimeField(auto_now_add=True)
     update_at=models.DateTimeField(auto_now=True)
@@ -113,6 +118,10 @@ class Product(models.Model):
         ('In-Stock', 'In-Stock'),
         ('Out-Of-Stock', 'Out-Of-Stock'),
     )
+    FEATURE=(
+        ('Yes','Yes'),
+        ('No','No'),
+    )
     category = models.ForeignKey(Category, on_delete=models.CASCADE) #many to one relation with Category
     title = models.CharField(max_length=150)
     #keywords = models.CharField(max_length=255)
@@ -126,9 +135,10 @@ class Product(models.Model):
     detail=RichTextUploadingField()
     slug = models.SlugField(null=False, unique=True)
     status=models.CharField(max_length=10,choices=STATUS)
+    feature_to_home_page=models.CharField(max_length=10,choices=FEATURE,default='No')
     create_at=models.DateTimeField(auto_now_add=True)
     update_at=models.DateTimeField(auto_now=True)
-    favorite = models.ManyToManyField(CustomUser,related_name='product_favorite',)
+    favorite = models.ManyToManyField(CustomUser,related_name='product_favorite',blank=True)
 
     def __str__(self):
         return self.title

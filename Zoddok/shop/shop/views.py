@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from urllib import request
-from products.models import Category
+from products.models import Category, Product
+from products.views import check_user_has_prodcut_in_favorites, check_list_of_prodcut_favorite
 from .forms import ContactForm
 from shop import custom_messages as Custom_Msg
 from django.contrib import messages
@@ -10,7 +11,14 @@ from .templatetags.env_extras import get_env_var
 
 #home page view
 def home(request):
-    return render(request,'index.html')
+    category=Category.objects.filter(feature_to_home_page='Yes')
+    latest_products=Product.objects.all().order_by('-id')[:4]
+    featured_products=Product.objects.filter(feature_to_home_page='Yes')
+    liked={}
+    liked=check_list_of_prodcut_favorite(request,liked,latest_products)
+    liked=check_list_of_prodcut_favorite(request,liked,featured_products)
+    context = { 'featured_category' : category , 'latest_products' : latest_products,'featured_products' : featured_products,'liked_by_user':liked}
+    return render(request,'index.html',context)
 
 #invalid url page view
 def invalid_url_view(request):

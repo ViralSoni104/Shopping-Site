@@ -35,12 +35,10 @@
     <link rel="stylesheet" href="{% static 'css/custom_css.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- pull the css -->
-        <link rel="stylesheet" href="https://unpkg.com/toastedjs/dist/toasted.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/toastedjs/dist/toasted.min.css">
 
-        <!-- pull the js file -->
-        <script src="https://unpkg.com/toastedjs/dist/toasted.min.js"></script>
-
-       
+    <!-- pull the js file -->
+    <script src="https://unpkg.com/toastedjs/dist/toasted.min.js"></script>
     {% block custom_css_and_links %}
     {% endblock %}
     </head>
@@ -57,7 +55,7 @@
                         </ul>
                         <ul class="list">
                             {% if user.is_authenticated %}
-                                
+                    
                             {% else %}
                                 <li><a href="{% url 'accounts' %}">Login</a></li>
                             {% endif %}
@@ -68,13 +66,15 @@
             <!--nav bar loads from nav.html using show_categories template tag function-->
             <nav class="navbar navbar-expand-lg  navbar-light">
                 <div class="container">
-                    <a class="navbar-brand" href="#">
+                    <a class="navbar-brand mt-3" href="#">
                         <img src="/media/img/logo.png" alt="">
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                      <span class="navbar-toggler-icon"></span>
+                        <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
+                    
+                    
+                    <div class="collapse mt-2 navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
                       <ul class="navbar-nav">
                             <li><a href="{% url 'home' %}">Home</a></li>
                             <li class="dropdown">
@@ -105,6 +105,7 @@
                 </div>
                 
             </nav>
+            
         </header>
         <!-- End Header Area -->
 
@@ -182,7 +183,7 @@
         <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
         <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
         <script src="{% static 'js/owl.carousel.min.js' %}"></script>           
-        <script src="{% static 'js/main.js' %}"></script>  
+        <script src="{% static 'js/main.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/passtrength.js' %}"></script>
         <script>
             $(document).ready(function(){
@@ -202,6 +203,7 @@
                     }
                 });
             });
+            
         </script>
         {% block scripts %}
         {% endblock %}
