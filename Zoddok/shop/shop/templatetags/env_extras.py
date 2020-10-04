@@ -3,6 +3,7 @@ from django import template
 from products.views import get_categories
 import json
 from products.models import Category
+from shop.models import SiteSetting
 import urllib.parse as urlparse
 from urllib.parse import urlencode
 import string
@@ -17,6 +18,12 @@ def get_team():
 @register.simple_tag
 def get_env_var(key):
     return os.environ.get(key)
+
+@register.simple_tag
+def get_site_setting():
+    Site_Setting=SiteSetting.objects.all().order_by('-id')[:1]
+    Site_Setting=Site_Setting[0]
+    return Site_Setting
 
 @register.filter(name='times') 
 def times(number):

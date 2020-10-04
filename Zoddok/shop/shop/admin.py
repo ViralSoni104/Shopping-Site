@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .forms import ContactForm
-from .models import Contact, Team
+from .models import Contact, Team, SiteSetting
 
 class ContactAdmin(admin.ModelAdmin):
     model=Contact
@@ -16,5 +16,11 @@ class TeamAdmin(admin.ModelAdmin):
     list_filter = ('Member_Position',)
     readonly_fields = ('image_tag',)
 
+class SiteAdmin(admin.ModelAdmin):
+    model=SiteSetting
+    list_display = ('logo_image_tag','fav_icon_image_tag','Contact_No_1','Email')
+    
+
 admin.site.register(Contact,ContactAdmin)
 admin.site.register(Team,TeamAdmin)
+admin.site.register(SiteSetting,SiteAdmin)

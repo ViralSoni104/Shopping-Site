@@ -7,7 +7,7 @@
     <!-- Mobile Specific Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Favicon-->
-    <link rel="shortcut icon" href="{% static 'img/fav.png' %}">
+    <link rel="shortcut icon" href="{{MEDIA_URL}}/media/{% get_site_setting as site %}{{ site.Fav_Icon }}">
     <!-- meta character set -->
     <meta charset="UTF-8">
     {% block meta_tags %}{% endblock %}
@@ -50,8 +50,8 @@
                 <div class="menu-top container">
                     <div class="d-flex justify-content-between align-items-center">
                         <ul class="list">
-                            <li><a href="tel:+919724408417">{% get_env_var 'CONTACT_NO' %}</a></li>
-                            <li><a href="mailto:zoddoks@gmail.com">{% get_env_var 'CONTACT_MAIL' %}</a></li>                             
+                            <li><a href="tel:+919724408417">{% get_site_setting as site %}{{ site.Contact_No_1 }}</a></li>
+                            <li><a href="mailto:zoddoks@gmail.com">{% get_site_setting as site %}{{ site.Email }}</a></li>                             
                         </ul>
                         <ul class="list">
                             {% if user.is_authenticated %}
@@ -66,15 +66,15 @@
             <!--nav bar loads from nav.html using show_categories template tag function-->
             <nav class="navbar navbar-expand-lg  navbar-light">
                 <div class="container">
-                    <a class="navbar-brand mt-3" href="#">
-                        <img src="/media/img/logo.png" alt="">
+                    <a class="navbar-brand mt" href="{% url 'home' %}">
+                        <img src="/media/{% get_site_setting as site %}{{ site.Site_Logo }}" class="img-responsive" style="width: 100px;" alt="">
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     
                     
-                    <div class="collapse mt-2 navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
+                    <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
                       <ul class="navbar-nav">
                             <li><a href="{% url 'home' %}">Home</a></li>
                             <li class="dropdown">
@@ -126,7 +126,7 @@
                         <div class="single-footer-widget">
                             <h6>About Us</h6>
                             <p>
-                                We provide all clothing and acessories for mens, womens and kids.
+                                {% get_site_setting as site %}{{ site.Short_About_Us }}
                             </p>
                         </div>
                     </div>
@@ -134,11 +134,11 @@
                         <div class="single-footer-widget">
                             <h6>Contact Us</h6>
                             <p>
-                                <i class="fa fa-phone" aria-hidden="true"></i>&nbsp;&nbsp;{% get_env_var 'CONTACT_NO' %}
+                                <i class="fa fa-phone" aria-hidden="true"></i>&nbsp;&nbsp;{% get_site_setting as site %}{{ site.Contact_No_1 }}
                                 <br/><br/>
-                                <i class="fa fa-phone" aria-hidden="true"></i>&nbsp;&nbsp;{% get_env_var 'OPT_CON_NO' %}
+                                <i class="fa fa-phone" aria-hidden="true"></i>&nbsp;&nbsp;{% get_site_setting as site %}{{ site.Contact_No_2 }}
                                 <br/><br/>
-                                <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;{% get_env_var 'CONTACT_MAIL' %}
+                                <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;&nbsp;{% get_site_setting as site %}{{ site.Email }}
                             </p>
                             
                         </div>
@@ -156,10 +156,10 @@
                             <h6>Follow Us</h6>
                             <p>Let us be social</p>
                             <div class="footer-social d-flex align-items-center">
-                                <a href="{% get_env_var 'FACEBOOK_AC' %}"><i class="fa fa-facebook"></i></a>
-                                <a href="{% get_env_var 'INSTA_AC' %}"><i class="fa fa-instagram"></i></a>
-                                <a href="{% get_env_var 'TWITTER_AC' %}"><i class="fa fa-twitter"></i></a>
-                                <a href="{% get_env_var 'YOUTUBE_AC' %}"><i class="fa fa-youtube-play"></i></a>
+                                <a href="{% get_site_setting as site %}{{ site.FaceBook_Account }}"><i class="fa fa-facebook"></i></a>
+                                <a href="{% get_site_setting as site %}{{ site.Instagram_Account }}"><i class="fa fa-instagram"></i></a>
+                                <a href="{% get_site_setting as site %}{{ site.Twitter_Account }}"><i class="fa fa-twitter"></i></a>
+                                <a href="{% get_site_setting as site %}{{ site.Linkedin_Account }}"><i class="fa fa-linkedin"></i></a>
                             </div>
                         </div>
                     </div>                          
@@ -188,7 +188,7 @@
         <script>
             $(document).ready(function(){
                 $.ajax({
-                    url:"{% get_env_var 'INSTA_AC' %}?__a=1",
+                    url:"{% get_site_setting as site %}{{ site.Instagram_Account }}?__a=1",
                     type:'get',
                     success:function(response){
                     posts = response.graphql.user.edge_owner_to_timeline_media.edges;
