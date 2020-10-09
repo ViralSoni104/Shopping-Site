@@ -9,9 +9,9 @@
     <!-- Author Meta -->
     <meta name="author" content="">
     <!-- Meta Description -->
-    <meta name="description" content="">
+    <meta name="description" content="{% get_site_setting as site %}{{ site.home_page_meta_description }}">
     <!-- Meta Keyword -->
-    <meta name="keywords" content="">
+    <meta name="keywords" content="{% get_site_setting as site %}{{ site.home_page_meta_keywords }}">
 {% endblock %}
 
 {% block title_tag %}Home{% endblock %}
@@ -22,12 +22,19 @@
 
 {% endblock %}
 {% block content %}
+
 <section class="banner-area relative" id="home">
     <div class="container-fluid">
         <div class="row fullscreen align-items-center justify-content-center">
-            <div class="col-lg-12 col-md-12 d-flex justify-content-center mt-5 align-self-center img-center no-padding">
-                <img class="img-fluid" src="/media/{% get_site_setting as site %}{{ site.Home_Page_Banner }}" alt="" style="height:100%;object-fit: cover;">
+            <div class="col-lg-6 col-md-12 d-flex align-self-end img-right no-padding">
+                <img class="img-fluid" src="/media/{% get_site_setting as site %}{{ site.Home_Page_Banner }}" alt="{% get_site_setting as site %}{{ site.Home_Page_Banner_Alternative_Text }}">
             </div>
+            <div class="banner-content col-lg-6 col-md-12">
+                <h1 class="title-top">{% get_site_setting as site %}{{ site.Home_Page_Small_Text}}</h1>
+                <h1 class="text-uppercase">
+                    {% get_site_setting as site %}{{ site.Home_Page_Big_Text }}
+                </h1>
+            </div>							
         </div>
     </div>
 </section>
@@ -48,7 +55,7 @@
                             <div class="content">
                                 <a href="{{top.get_absolute_url}}" target="_blank">
                                     <div class="content-overlay"></div>
-                                        <img class="content-image img-fluid d-block mx-auto img-responsive d-flex"  style="object-fit: cover;height: 300px;" src="/media/{{top.image}}" alt="">
+                                        <img class="content-image img-fluid d-block mx-auto img-responsive custimg d-flex" src="/media/{{top.image}}" alt="{{top.image_alternative_text}}">
                                     <div class="content-details fadeIn-bottom">
                                     <h3 class="content-title">{{top.title}}</h3>
                                     </div>
@@ -62,7 +69,7 @@
         </div>
     </div>	
 </section>
-<section class="men-product-area section-gap relative" id="men" style="background-image: url(/media/img/men-bg.jpg);background-repeat: no-repeat;background-size: cover;">
+<section class="men-product-area section-gap relative" id="men">
     <div class="overlay overlay-bg"></div>
     <div class="container">
         <div class="row d-flex justify-content-center">
@@ -77,7 +84,7 @@
                 <div class="col-lg-3 col-md-6 single-product mb-30">
                 <div class="content">
                     <div class="content-overlay"></div>
-                        <img class="content-image img-fluid d-block mx-auto" src="/media/{{rs.image}}" style="object-fit: cover;height: 300px;" alt="">
+                        <img class="content-image img-fluid d-block mx-auto custimg" src="/media/{{rs.image}}" alt="{{rs.image_alternative_text}}">
                     <div class="content-details fadeIn-bottom">
                             <div class="bottom d-flex align-items-center justify-content-center">
                                 <a href="/product/{{rs.id}}/{{rs.slug}}"><span class="lnr lnr-eye"></span></a>
@@ -86,7 +93,6 @@
                                 {% else %}
                                     <a href="{% url 'add-favorite' rs.id %}"><span class="fa fa-heart-o"></span></a>
                                 {% endif %}
-                                <a href="#"><span class="lnr lnr-cart"></span></a>
                             </div>
                     </div>
                 </div>
@@ -111,7 +117,7 @@
                 <div class="col-lg-3 col-md-6 single-product">
                 <div class="content">
                     <div class="content-overlay"></div>
-                        <img class="content-image img-fluid d-block mx-auto" style="object-fit: cover;height: 300px;" src="/media/{{rs.image}}" alt="">
+                        <img class="content-image custimg img-fluid d-block mx-auto" src="/media/{{rs.image}}" alt="{{rs.image_alternative_text}}">
                     <div class="content-details fadeIn-bottom">
                             <div class="bottom d-flex align-items-center justify-content-center">
                                 <a href="/product/{{rs.id}}/{{rs.slug}}"><span class="lnr lnr-eye"></span></a>
@@ -120,7 +126,6 @@
                                 {% else %}
                                     <a href="{% url 'add-favorite' rs.id %}"><span class="fa fa-heart-o"></span></a>
                                 {% endif %}
-                                <a href="#"><span class="lnr lnr-cart"></span></a>
                             </div>
                     </div>
                 </div>

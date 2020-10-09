@@ -55,7 +55,14 @@
                         </ul>
                         <ul class="list">
                             {% if user.is_authenticated %}
-                    
+                                <li class="dropdown">
+                                    <a class="dropbtn"><i class="fa fa-2x fa-user-circle"></i></a>
+                                    <div class="dropdown-content">
+                                        <a href="{% url 'your-favorites' %}"><i class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;&nbsp;Your Wishlist</a>
+                                        <a href="{% url 'change-password' %}">Change Password</a>
+                                        <a href="{% url 'logout' %}"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;&nbsp;Logout</a>
+                                    </div>
+                                </li>
                             {% else %}
                                 <li><a href="{% url 'accounts' %}">Login</a></li>
                             {% endif %}
@@ -65,15 +72,19 @@
             </div>
             <!--nav bar loads from nav.html using show_categories template tag function-->
             <nav class="navbar navbar-expand-lg  navbar-light">
-                <div class="container">
-                    <a class="navbar-brand mt" href="{% url 'home' %}">
+                <div class="container d-flex">
+                    <a class="navbar-brand" href="{% url 'home' %}">
                         <img src="/media/{% get_site_setting as site %}{{ site.Site_Logo }}" class="img-responsive" style="width: 100px;" alt="">
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    
-                    
+                    <div class="container">
+                        <form class="row">
+                            <input type="search" class="common-input col-md-10 col-sm-9 col-xs-9 col-9" name="search" placeholder="Search Products Here..."/>
+                            <button type="submit" class="col-md-2 col-sm-3 col-xs-3 col-3 genric-btn primary common-input"><span class="fa fa-search"></span></button>
+                        </form>
+                    </div>
                     <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
                       <ul class="navbar-nav">
                             <li><a href="{% url 'home' %}">Home</a></li>
@@ -86,26 +97,11 @@
                                 </div>
                             </li>
                             <li><a href="{% url 'about' %}">About</a></li>
-                            <li><a href="{% url 'contact' %}">Contact</a></li>
-                    
-                            {% if user.is_authenticated %}
-                                <li class="dropdown">
-                                <a class="dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                                    Account
-                                </a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{% url 'your-favorites' %}"><i class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;&nbsp;Your Wishlist</a>
-                                    <a class="dropdown-item" href="{% url 'change-password' %}">Change Password</a>
-                                    <a class="dropdown-item" href="{% url 'logout' %}"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;&nbsp;Logout</a>
-                                </div>
-                                </li>
-                            {% endif %}									
+                            <li><a href="{% url 'contact' %}">Contact</a></li>								
                         </ul>
                     </div>
                 </div>
-                
             </nav>
-            
         </header>
         <!-- End Header Area -->
 
@@ -203,7 +199,6 @@
                     }
                 });
             });
-            
         </script>
         {% block scripts %}
         {% endblock %}

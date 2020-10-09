@@ -23,6 +23,7 @@ class Category(MPTTModel):
     status=models.CharField(max_length=10,choices=STATUS)
     feature_to_home_page=models.CharField(max_length=10,choices=FEATURE,default='No')
     image=models.ImageField(blank=True,upload_to='img/')
+    image_alternative_text = models.CharField(blank=True,max_length=255)
     create_at=models.DateTimeField(auto_now_add=True)
     update_at=models.DateTimeField(auto_now=True)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children',db_index=True)
@@ -129,6 +130,7 @@ class Product(models.Model):
     meta_keywords=models.TextField(null=True,blank=True)
     description = models.TextField()
     image=models.ImageField(upload_to='img/',null=False)
+    image_alternative_text = models.CharField(blank=True,max_length=255)
     price = models.DecimalField(max_digits=12, decimal_places=2,default=0)
     variant=models.CharField(max_length=10,choices=VARIANTS, default='None')
     stocks=models.CharField(max_length=12,choices=STOCKS, default='In-Stock')
@@ -157,7 +159,7 @@ class Images(models.Model):
     product=models.ForeignKey(Product,on_delete=models.CASCADE)
     title = models.CharField(max_length=50,blank=True)
     image = models.ImageField(blank=True, upload_to='img/')
-
+    image_alternative_text = models.CharField(blank=True,max_length=255)
     def __str__(self):
         return self.title
 

@@ -14,6 +14,9 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+import requests
+from bs4 import BeautifulSoup
+
 
 # Create your views here.
 def get_categories():
@@ -58,11 +61,36 @@ def product_detail(request,id,slug):
     category=Category.objects.get(pk=category.id).get_ancestors()
     images = Images.objects.filter(product_id=id)
     social_links=SocialLinks.objects.filter(product_id=id)
+    
+    url=''
+    product_reviews={}
+    for rs in social_links:
+        if rs.name == 'Flipkart':
+            url = rs.link
+            r = requests.get(url)
+            htmlContent = r.content
+            soup = BeautifulSoup(htmlContent,'html.parser')
+            rating = soup.find('div',attrs={'class':'hGSR34 bqXGTW'})
+            rating = rating.text
+            total_no_of_rating = soup.find('span',attrs={'class':'_38sUEc'})
+            total_no_of_rating = total_no_of_rating.text
+            reviews = soup.find_all('div',attrs={'class':'_2t8wE0'})
+            r={}
+            i=0
+            for rs in reviews:
+                r.__setitem__(i,rs.text)
+                i+=1
 
+            product_reviews ={
+                'rating':rating,
+                'total_no_of_rating':total_no_of_rating,
+                'reviews':r,
+            }
+    
     liked=check_user_has_prodcut_in_favorites(request,product)
-
+    
     context = {'product': product,'product_category': category,
-               'images': images,'sociallinks':social_links,'liked_by_user':liked,
+               'images': images,'sociallinks':social_links,'liked_by_user':liked,'product_review':product_reviews
                }
 
     if product.variant !="None": # Product have variants

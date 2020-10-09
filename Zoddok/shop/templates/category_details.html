@@ -32,10 +32,10 @@
 {% endblock %}
 
 {% block breadcrum %}
-<section class="banner-area organic-breadcrumb">
-    <div class="container">
-        <div class="breadcrumb-banner d-flex flex-wrap align-items-center">
-            <div class="col-lg-12 col-xs-12 col-first col-sm-12 d-flex flex-wrap align-items-center">
+<section class="banner-area organic-breadcrumb relative">
+    <div class="container mt-lg-0 mt-md-120 mt-120 mt-sm-200">
+        <div class="breadcrumb-banner d-flex align-items-center">
+            <div class="col-lg-12 col-xs-12 col-first col-sm-12 align-items-center">
                 <a href="{% url 'home'%}">Home&nbsp;&nbsp;<i class="fa fa-caret-right" aria-hidden="true"></i>&nbsp;</a>
                 {% for c in sitemap|times %}
                     {% if c == sitemap|var_length %}
@@ -65,7 +65,7 @@
                             <div class="col-xl-4 col-lg-6 col-md-12 col-sm-6 single-product">
                             <div class="content">
                                 <div class="content-overlay"></div>
-                                    <img class="content-image img-fluid d-block mx-auto" src="{{rs.image.url}}" alt="" style="object-fit: cover;height: 300px;">
+                                    <img class="content-image img-fluid d-block mx-auto custimg" src="{{rs.image.url}}" alt="{{rs.image_alternative_text}}">
                                 <div class="content-details fadeIn-bottom">
                                         <div class="d-flex align-items-center justify-content-center">
                                             <a href="{{rs.slug}}" class="view-btn color-2"><span>View More</span><span class="ml-3 fa fa-eye" aria-hidden="true"></span></a>
@@ -84,7 +84,7 @@
                             <div class="col-xl-4 col-lg-6 col-md-12 col-sm-6 single-product">
                             <div class="content">
                                 <div class="content-overlay"></div>
-                                    <img class="content-image img-fluid d-block mx-auto" src="{{rs.image.url}}" alt="">
+                                    <img class="content-image img-fluid d-block mx-auto custimg" src="{{rs.image.url}}" alt="{{rs.image_alternative_text}}">
                                 <div class="content-details fadeIn-bottom">
                                         <div class="bottom d-flex align-items-center justify-content-center">
                                             <a href="/product/{{rs.id}}/{{rs.slug}}"><span class="lnr lnr-eye"></span></a>
@@ -93,7 +93,6 @@
                                             {% else %}
                                                 <a href="{% url 'add-favorite' rs.id %}"><span class="fa fa-heart-o"></span></a>
                                             {% endif %}
-                                            <a href="#"><span class="lnr lnr-cart"></span></a>
                                         </div>
                                 </div>
                             </div>
@@ -108,7 +107,7 @@
                                     <div class="text-center">
                                         <i class="mr-20 mb-20 fa fa-5x fa-exclamation-triangle" aria-hidden="true"></i>
                                         <br/>
-                                        <span style="font-size:38px;line-height:150%;">
+                                        <span class="no-result">
                                             Sorry, No result found
                                         </span>
                                     </div>

@@ -1,12 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block meta_tags %}
-    <!-- Author Meta -->
-    <meta name="author" content="">
-    <!-- Meta Description -->
-    <meta name="description" content="">
-    <!-- Meta Keyword -->
-    <meta name="keywords" content="">
+
 {% endblock %}
 
 {% block title_tag %}Invalid url{% endblock %}
@@ -20,18 +15,15 @@
 {% endblock %}
 {% block content %}
 <section class="banner-area relative" id="home">
-    <div class="container-fluid">
-        <div class="row fullscreen align-items-center justify-content-center">
-            <div class="col-lg-6 col-md-12 d-flex align-self-end img-right no-padding">
-                <img class="img-fluid" src="../media/img/404.png" alt="">
+    <div class="page-wrap d-flex flex-row align-items-center">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-12 text-center">
+                    <span class="display-1 d-block">404</span>
+                    <div class="mb-4 lead">The page you are looking for was not found.</div>
+                    <a href="{% url 'home' %}" class="btn genric-btn success radius">Back to Home</a>
+                </div>
             </div>
-            <div class="banner-content col-lg-6 col-md-12">
-                <h1 class="text-uppercase">
-                   <strong style="font-size: 120px;">404</strong>
-                   <br/><span style="font-size:45px;font-weight: 300;">Oops Page not found</span>
-                </h1>
-                <button class="primary-btn text-uppercase"><a href="{% url 'home' %}">Go back to home</a></button>
-            </div>							
         </div>
     </div>
 </section>

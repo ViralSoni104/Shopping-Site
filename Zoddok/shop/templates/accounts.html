@@ -3,12 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block meta_tags %}
-    <!-- Author Meta -->
-    <meta name="author" content="">
-    <!-- Meta Description -->
-    <meta name="description" content="">
-    <!-- Meta Keyword -->
-    <meta name="keywords" content="">
+
 {% endblock %}
 
 {% block title_tag %}Accounts{% endblock %}
@@ -19,7 +14,7 @@
 
 {% block breadcrum %}
 <section class="banner-area organic-breadcrumb">
-  <div class="container">
+  <div class="container mt-lg-0 mt-md-120 mt-120 mt-sm-200">
       <div class="breadcrumb-banner d-flex flex-wrap align-items-center">
           <div class="col-lg-12 col-xs-12 col-first col-sm-12 d-flex flex-wrap align-items-center">
               <a href="{% url 'home'%}">Home&nbsp;&nbsp;<i class="fa fa-caret-right" aria-hidden="true"></i>&nbsp;</a>
@@ -99,23 +94,13 @@
           <br/><br/>
           <button class="view-btn color-2 mt-20 w-100" name='login' value="login">
               <span>Login
-                {% if otp_send_mail %}
-                  With Login Code
-                {% else %}
-                  With Password
-                {% endif %}
               </span>
           </button>
           {% if otp_send_mail %}
              <button class="view-btn color-2 mt-20 w-100" name='resendcode' value="resendcode"><span>Resend Login Code</span></button>
-             <div class="or-container">
-              <div class="line-separator"></div>
-              <div class="or-label">or</div>
-              <div class="line-separator"></div>
-            </div>
-            <a href="{% url 'accounts' %}" class="view-btn color-2 mt-20 w-100" name='resendcode' value="loginwithpass"><span>Login with password</span></a>
+             <a href="" class="d-flex justify-content-center align-items-center mt-20">Back to login with password</a>
           {% else %}
-          <button class="view-btn color-2 mt-20 w-100" name='otplogin' value="otplogin"><span>Get Login Code On Your Mail</span></button>
+          <button class="view-btn color-2 mt-20 w-100" name='otplogin' value="otplogin"><span>Request Login Code</span></button>
           <div class="mt-20 d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center"><input type="checkbox" class="pixel-checkbox" id="remember_me" name="remember_me">
             <label for="login-1">Keep me logged in.</label></div>
