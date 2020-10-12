@@ -8,6 +8,12 @@ from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 from .templatetags.env_extras import get_env_var
+import json
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from products.views import check_user_has_prodcut_in_favorites, check_list_of_prodcut_favorite
+from django.db.models import Avg, Max, Min, Sum
+from mptt.templatetags.mptt_tags import cache_tree_children, get_cached_trees
+from collections import OrderedDict 
 
 #home page view
 def home(request):
@@ -47,3 +53,71 @@ def contact_view(request):
             messages.success(request,Custom_Msg.CONTACT_MAIL_SENT)
             return redirect('contact')
     return render(request,'contact_us.html',{'form':form})
+
+def search_auto(request):
+    if request.is_ajax():
+        q = request.GET.get('search', '')
+        products = Product.objects.filter(title__icontains=q)
+
+        results = []
+        for rs in products:
+            product_json = {}
+            product_json = rs.title + " -> " + rs.category.title 
+            results.append(product_json)
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+def search(request):
+    if request.method == 'GET':
+        query = request.GET.get('search')
+        liked={}
+        order_by_filter=''
+        filter_stock=''
+        price_from=0
+        price_to=Product.objects.all().aggregate(Max('price'))['price__max']
+
+        if request.GET.get('ordering','') == 'title' or request.GET.get('ordering','') == '-title' or request.GET.get('ordering','') == '-price'  or request.GET.get('ordering','') == 'price':
+            order_by_filter=request.GET.get('ordering','')
+        if request.GET.get('availabel','') == 'In-Stock' or request.GET.get('availabel','') == 'Include-Out-Of-Stock':
+            filter_stock=request.GET.get('availabel','')
+            if request.GET.get('availabel','') == 'Include-Out-Of-Stock':
+                filter_stock=''
+        if request.GET.get('price_from','') != '':
+            price_from=request.GET.get('price_from')
+        if request.GET.get('price_to','') != '':
+            price_to=request.GET.get('price_to')
+
+        page = request.GET.get('page', 1)
+
+        if order_by_filter == '' and filter_stock == '':
+            product_list=Product.objects.filter(title__icontains=query,price__range=(price_from,price_to))
+        elif order_by_filter == '' and filter_stock != '':
+            product_list=Product.objects.filter(title__icontains=query,stocks=filter_stock,price__range=(price_from,price_to))
+        elif order_by_filter !='' and filter_stock == '':
+            product_list=Product.objects.filter(title__icontains=query,price__range=(price_from,price_to)).order_by(order_by_filter)
+        elif order_by_filter !='' and filter_stock != ' ':
+            product_list=Product.objects.filter(title__icontains=query,stocks=filter_stock,price__range=(price_from,price_to)).order_by(order_by_filter)
+        
+        paginator = Paginator(product_list, 15)
+        try:
+            product_list = paginator.page(page)
+        except PageNotAnInteger:
+            product_list = paginator.page(1)
+        except EmptyPage:
+            product_list = paginator.page(paginator.num_pages)
+        sub_cat = []
+        for rs in product_list:
+            sub_cat.append(rs.category)
+        
+        res = list(OrderedDict.fromkeys(sub_cat))  
+        liked=check_list_of_prodcut_favorite(request,liked,product_list)
+        context = {
+            'sitemap':query,
+            'sub_categories':res,
+            'products':product_list,
+            'liked_by_user':liked
+        }
+        return render(request, 'search.html', context)

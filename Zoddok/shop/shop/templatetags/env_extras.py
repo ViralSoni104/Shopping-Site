@@ -8,6 +8,8 @@ import urllib.parse as urlparse
 from urllib.parse import urlencode
 import string
 from shop.models import Team
+from django.urls import reverse
+
 register = template.Library()
 
 

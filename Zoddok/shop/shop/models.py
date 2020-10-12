@@ -46,6 +46,7 @@ class SiteSetting(models.Model):
     Twitter_Account = models.CharField(blank=True,max_length=255)
     Instagram_Account = models.CharField(blank=True,max_length=255)
     Linkedin_Account = models.CharField(blank=True,max_length=255)
+    Address = models.CharField(blank=True,max_length=255)
     Contact_No_1 = models.CharField(blank=True,max_length=255)
     Contact_No_2 = models.CharField(blank=True,max_length=255)
     Email = models.EmailField(blank=True,max_length=255)

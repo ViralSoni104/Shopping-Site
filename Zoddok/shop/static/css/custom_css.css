@@ -207,6 +207,9 @@ li.sort-link span{
 .navbar-nav{
     font-size: 0.8rem;
 }
+.navbar-nav li{
+    margin-right: -2%;
+}
 .page-wrap {
     min-height: 100vh;
     color: white;

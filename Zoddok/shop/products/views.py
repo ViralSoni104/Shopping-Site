@@ -4,7 +4,6 @@ from mptt.templatetags.mptt_tags import cache_tree_children
 import json
 from django.template.loader import render_to_string
 from django.http import JsonResponse
-from mptt.templatetags.mptt_tags import cache_tree_children
 import json
 from django.shortcuts import get_object_or_404
 import string 
@@ -170,11 +169,13 @@ def category(request,slug):
         filter_stock=''
         price_from=0
         price_to=Product.objects.all().aggregate(Max('price'))['price__max']
-        print(price_to)
+
         if request.GET.get('ordering','') == 'title' or request.GET.get('ordering','') == '-title' or request.GET.get('ordering','') == '-price'  or request.GET.get('ordering','') == 'price':
             order_by_filter=request.GET.get('ordering','')
-        if request.GET.get('availabel','') == 'In-Stock' or request.GET.get('availabel','') == 'Out-of-Stock':
+        if request.GET.get('availabel','') == 'In-Stock' or request.GET.get('availabel','') == 'Include-Out-Of-Stock':
             filter_stock=request.GET.get('availabel','')
+            if request.GET.get('availabel','') == 'Include-Out-Of-Stock':
+                filter_stock=''
         if request.GET.get('price_from','') != '':
             price_from=request.GET.get('price_from')
         if request.GET.get('price_to','') != '':
