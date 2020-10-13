@@ -50,6 +50,7 @@ urlpatterns = [
     path('contact-us/',views.contact_view,name="contact"),
     path('search_auto/',views.search_auto,name="search_auto"),
     path('search/',views.search,name="search"),
+    path('FAQ/',views.FAQ_View,name="faq"),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS)

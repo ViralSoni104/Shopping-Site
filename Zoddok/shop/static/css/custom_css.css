@@ -285,3 +285,31 @@ li.sort-link span{
 .men-product-area{
     background-image: url(/media/img/men-bg.jpg);background-repeat: no-repeat;background-size: cover;
 }
+.accordion .card-header:after {
+    font-family: 'FontAwesome';  
+    content: "\f068";
+    float: right; 
+}
+.accordion .card-header.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\f067"; 
+}
+.accordion .card-header{
+    background-image: -moz-linear-gradient(45deg, #f6463d 0%, #f6398d 45%, #f52cdc 100%);
+    background-image: -webkit-linear-gradient(45deg, #f6463d 0%, #f6398d 45%, #f52cdc 100%);
+    background-image: -ms-linear-gradient(45deg, #f6463d 0%, #f6398d 45%, #f52cdc 100%);
+    color: white;
+    font-weight: 500;
+    font-size: 0.8rem;
+}   
+.accordion{
+    border: 1px solid white;
+}
+.faqtitle{
+    margin-top: -4%;
+    font-size: 2rem;
+}
+.accordion .card-body p{
+    font-weight: 400;
+    color: black;
+}

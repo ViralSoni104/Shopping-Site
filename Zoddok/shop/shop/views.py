@@ -14,6 +14,7 @@ from products.views import check_user_has_prodcut_in_favorites, check_list_of_pr
 from django.db.models import Avg, Max, Min, Sum
 from mptt.templatetags.mptt_tags import cache_tree_children, get_cached_trees
 from collections import OrderedDict 
+from .models import FAQ
 
 #home page view
 def home(request):
@@ -62,7 +63,7 @@ def search_auto(request):
         results = []
         for rs in products:
             product_json = {}
-            product_json = rs.title + " -> " + rs.category.title 
+            product_json = rs.title
             results.append(product_json)
         data = json.dumps(results)
     else:
@@ -121,3 +122,10 @@ def search(request):
             'liked_by_user':liked
         }
         return render(request, 'search.html', context)
+
+def FAQ_View(request):
+    faq = FAQ.objects.filter(status="True").order_by("position_number")
+    context = {
+        'faq': faq,
+    }
+    return render(request, 'FAQ.html', context)

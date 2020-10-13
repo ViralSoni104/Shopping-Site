@@ -38,6 +38,8 @@ class SiteSetting(models.Model):
     about_page_meta_keywords=models.TextField(null=True,blank=True)
     contact_page_meta_description=models.TextField(null=True,blank=True)
     contact_page_meta_keywords=models.TextField(null=True,blank=True)
+    faq_page_meta_description=models.TextField(null=True,blank=True)
+    faq_page_meta_keywords=models.TextField(null=True,blank=True)
     Home_Page_Banner = models.ImageField(blank=True,upload_to='img/')
     Home_Page_Banner_Alternative_Text = models.CharField(blank=True,max_length=255)
     Home_Page_Small_Text = models.CharField(blank=True,max_length=255)
@@ -69,3 +71,18 @@ class SiteSetting(models.Model):
             return mark_safe('<img src="{}" height="50"/>'.format(self.Site_Logo.url))
         else:
             return ""
+
+class FAQ(models.Model):
+    STATUS = (
+        ('True', 'True'),
+        ('False', 'False'),
+    )
+    position_number = models.IntegerField()
+    question = models.CharField(max_length=200)
+    answer = RichTextUploadingField()
+    status=models.CharField(max_length=10, choices=STATUS)
+    create_at=models.DateTimeField(auto_now_add=True)
+    update_at=models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.question
