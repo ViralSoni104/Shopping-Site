@@ -72,7 +72,7 @@
                     </div>
                     <div class="top">
                         <h3 class="head ptitle">{{ product.title }}</h3>
-                        <div class="price pprice d-flex align-items-center">Starting Price &nbsp;&nbsp;<span class="lnr lnr-tag"></span><span class="ml-10"><i class="fa fa-inr" aria-hidden="true"></i>{{ product.price }}</span></div>
+                        <div class="price d-flex align-items-center">Starting Price &nbsp;&nbsp;<span class="lnr lnr-tag"></span><span class="ml-10"><i class="fa fa-inr" aria-hidden="true"></i>{{ product.price }}</span></div>
                         <div class="category cat_and_avail"><strong>Category</strong> : <span>{{ product.category.title }}</span></div>
                         <div class="available cat_and_avail"><strong>Availibility</strong> : {% if product.stocks == 'In-Stock' %}<span class="text-success">In Stock</span>{% else %}<span class="text-warning">Out of Stock</span>{% endif %}</span></div>
                     </div>

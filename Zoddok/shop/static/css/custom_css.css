@@ -240,14 +240,15 @@ li.sort-link span{
 .cat_and_avail{
     font-weight: 500;font-size: medium;
 }
-.pprice{
-    font-size: medium;
+.top .price{
+    font-size: 1.2rem;
 }
-.ptitle{
-    font-weight: 700;font-size: x-large;
+.top .ptitle{
+    font-weight: 600;font-size: x-large;
 }
 .descContent{
-    text-align:justify;text-justofy:inner-word;
+    text-align:justify;
+    text-justify:inner-word;
 }
 .available_title{
     font-size: medium;font-weight: 600;
