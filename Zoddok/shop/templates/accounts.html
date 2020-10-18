@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
-
+{% load env_extras %}
 {% block meta_tags %}
 
 {% endblock %}
 
-{% block title_tag %}Accounts{% endblock %}
+{% block title_tag %}{% get_site_setting as site %}{{ site.account_page_title }}{% endblock %}
 
 {% block custom_css_and_links %}
 

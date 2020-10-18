@@ -23,6 +23,17 @@ class SiteAdmin(admin.ModelAdmin):
 class FAQAdmin(admin.ModelAdmin):
     list_display = ['question', 'answer','position_number','status']
     list_filter = ['status',]
+    actions = ['make_published','make_unpublished']
+
+    def make_published(modladmin, request, queryset):
+        queryset.update(status='True')
+    make_published.short_description = "Make FAQ Visible To User"
+    
+
+    def make_unpublished(modeladmin, request, queryset):
+        queryset.update(status='False')
+    make_unpublished.short_description = "Hide FAQ From User"
+
 
 admin.site.register(Contact,ContactAdmin)
 admin.site.register(Team,TeamAdmin)

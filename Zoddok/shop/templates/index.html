@@ -14,7 +14,7 @@
     <meta name="keywords" content="{% get_site_setting as site %}{{ site.home_page_meta_keywords }}">
 {% endblock %}
 
-{% block title_tag %}Home{% endblock %}
+{% block title_tag %}{% get_site_setting as site %}{{ site.home_page_title }}{% endblock %}
 
 {% block custom_css_and_links %}{% endblock %}
 
@@ -57,7 +57,7 @@
                                     <div class="content-overlay"></div>
                                         <img class="content-image img-fluid d-block mx-auto img-responsive custimg d-flex" src="/media/{{top.image}}" alt="{{top.image_alternative_text}}">
                                     <div class="content-details fadeIn-bottom">
-                                    <h3 class="content-title">{{top.title}}</h3>
+                                        <h3 class="content-title">{{top.title}}</h3>
                                     </div>
                                 </a>
                             </div>
@@ -97,8 +97,14 @@
                     </div>
                 </div>
                 <div class="price">
-                        <h5 class="text-white">{{rs.title}}</h5>
-                        <h3 class="text-white"><span class="fa fa-inr"></span>{{rs.price}}</h3>
+                        <h5 class="text-white text-center">{{rs.title}}</h5>
+                        <h3 class="text-white text-center"><span class="fa fa-inr"></span>{{rs.sell_price}}</h3>
+                        {% if rs.sell_price != rs.price %}
+                            <div class="mt-2 container text-center discountdiv">
+                                <del class="text-white"><span class="fa fa-inr"></span>{{rs.price}}</del>
+                                <span class="ml-3 text-white">{{rs.flat_off_discount}}% off</span>
+                            </div>
+                        {% endif %}
                 </div>
                 </div>
             {% endfor %}																
@@ -130,8 +136,14 @@
                     </div>
                 </div>
                 <div class="price">
-                        <h5>{{rs.title}}</h5>
-                        <h3><span class="fa fa-inr"></span>{{rs.price}}</h3>
+                        <h5 class="text-center">{{rs.title}}</h5>
+                        <h3 class="text-center"><span class="fa fa-inr"></span>{{rs.sell_price}}</h3>
+                        {% if rs.sell_price != rs.price %}
+                            <div class="mt-2 container text-center discountdiv">
+                                <del class="catdel"><span class="fa fa-inr"></span>{{rs.price}}</del>
+                                <span class="ml-3 catins">{{rs.flat_off_discount}}% off</span>
+                            </div>
+                        {% endif %}
                 </div>						  
                 </div>
             {% endfor %}																			

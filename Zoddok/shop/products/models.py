@@ -132,6 +132,8 @@ class Product(models.Model):
     image=models.ImageField(upload_to='img/',null=False)
     image_alternative_text = models.CharField(blank=True,max_length=255)
     price = models.DecimalField(max_digits=12, decimal_places=2,default=0)
+    flat_off_discount = models.PositiveIntegerField(default=0)
+    sell_price = models.DecimalField(max_digits=12, decimal_places=2,default=0) 
     variant=models.CharField(max_length=10,choices=VARIANTS, default='None')
     stocks=models.CharField(max_length=12,choices=STOCKS, default='In-Stock')
     detail=RichTextUploadingField()

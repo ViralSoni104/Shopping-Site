@@ -12,7 +12,7 @@
     <meta name="keywords" content="{% get_site_setting as site %}{{ site.about_page_meta_keywords }}">
 {% endblock %}
 
-{% block title_tag %}About Us{% endblock %}
+{% block title_tag %}{% get_site_setting as site %}{{ site.about_page_title }}{% endblock %}
 
 {% block custom_css_and_links %}
 

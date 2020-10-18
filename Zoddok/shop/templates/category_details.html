@@ -82,24 +82,30 @@
                     {% else %}
                         {% for rs in products %}
                             <div class="col-xl-4 col-lg-6 col-md-12 col-sm-6 single-product">
-                            <div class="content">
-                                <div class="content-overlay"></div>
-                                    <img class="content-image img-fluid d-block mx-auto custimg" src="{{rs.image.url}}" alt="{{rs.image_alternative_text}}">
-                                <div class="content-details fadeIn-bottom">
-                                        <div class="bottom d-flex align-items-center justify-content-center">
-                                            <a href="/product/{{rs.id}}/{{rs.slug}}"><span class="lnr lnr-eye"></span></a>
-                                            {% if rs.id in liked_by_user %}
-                                                <a href="{% url 'add-favorite' rs.id %}"><span class="fa fa-heart"></span></a>
-                                            {% else %}
-                                                <a href="{% url 'add-favorite' rs.id %}"><span class="fa fa-heart-o"></span></a>
-                                            {% endif %}
-                                        </div>
+                                <div class="content">
+                                    <div class="content-overlay"></div>
+                                        <img class="content-image img-fluid d-block mx-auto custimg" src="{{rs.image.url}}" alt="{{rs.image_alternative_text}}">
+                                    <div class="content-details fadeIn-bottom">
+                                            <div class="bottom d-flex align-items-center justify-content-center">
+                                                <a href="/product/{{rs.id}}/{{rs.slug}}"><span class="lnr lnr-eye"></span></a>
+                                                {% if rs.id in liked_by_user %}
+                                                    <a href="{% url 'add-favorite' rs.id %}"><span class="fa fa-heart"></span></a>
+                                                {% else %}
+                                                    <a href="{% url 'add-favorite' rs.id %}"><span class="fa fa-heart-o"></span></a>
+                                                {% endif %}
+                                            </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="price text-center">
-                                <h5>{{rs.title}}</h5>
-                                <h3><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{rs.price}}</h3>
-                            </div>
+                                <div class="price text-center">
+                                    <h5>{{rs.title}}</h5>
+                                    <h3><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{rs.sell_price}}</h3>
+                                    {% if rs.sell_price != rs.price %}
+                                        <div class="mt-2 container text-center discountdiv">
+                                            <del class="catdel"><span class="fa fa-inr"></span>{{rs.price}}</del>
+                                            <span class="catins ml-3">{{rs.flat_off_discount}}% off</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
                         {% empty %}
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 single-product">

@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block meta_tags %}
-
+{% load env_extras %}
 {% endblock %}
 
-{% block title_tag %}Invalid url{% endblock %}
+{% block title_tag %}{% get_site_setting as site %}{{ site.error_404_page_title }}{% endblock %}
 
 {% block custom_css_and_links %}
 
