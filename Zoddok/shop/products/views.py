@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Category,Color,Product,Variants,Size,Images,SocialLinks
+from .models import Category,Product
 from mptt.templatetags.mptt_tags import cache_tree_children
 import json
 from django.template.loader import render_to_string
@@ -50,64 +50,70 @@ def check_list_of_prodcut_favorite(request,liked,product_list):
     return liked
 
 def product_detail(request,id,slug):
-    query = request.GET.get('q')
+    #query = request.GET.get('q')
     try:
         product = Product.objects.get(pk=id)
     except:
         return redirect('invalid-url')
 
+    r = requests.get(product.product_link)
+    htmlContent = r.content
+    soup = BeautifulSoup(htmlContent,'html.parser')
+    # product_title = soup.find('span',attrs={'class':'B_NuCI'}).text
+    product_price = soup.find('div',attrs={'class':'_30jeq3 _16Jk6d'}).text
+
+    product_detail_list = soup.find('script',attrs={'id':'jsonLD'},type='application/ld+json')
+    json_data = json.loads(product_detail_list.string)
+    product_image  = json_data[0]['image']
+    product_rating = json_data[0]['aggregateRating']['ratingValue']
+    product_total_no_of_reviews = json_data[0]['aggregateRating']['reviewCount']
+    
+
+    product_description = {}
+    product_short_description = ''
+    product_details = {}
+    
+    short_description_from_details = soup.find('div',attrs={'class':'_1AN87F'})
+    if short_description_from_details is not None:
+        short_description_from_details = short_description_from_details.text
+    else:
+        short_description_from_details = ''
+    
+    total_rating = soup.findAll('span',attrs={'class':'_2_R_DZ'})
+    for rs in total_rating:
+        total_no_of_ratiing = rs.text
+        break
+
+    short_description = soup.findAll('div',attrs={'class':'_1mXcCf RmoJUa'})
+    for rs in short_description:
+        product_short_description = rs.find('p').text
+        break
+
+    description_headers = soup.findAll('div',attrs={'class':'_3qWObK'})
+    descriptions = soup.findAll('div',attrs={'class':'_3zQntF'})
+    for i, description in enumerate(descriptions):
+        product_description[description_headers[i].text.strip()] = description.text.strip()
+
+    detail_headers = soup.findAll('div',attrs={'class':'_2H87wv'})
+    details = soup.findAll('div',attrs={'class':'_2vZqPX'})
+    for i, detail in enumerate(details):
+        product_details[detail_headers[i].text.strip()] = detail.text.strip()
+
+
     category = Category.objects.get(pk=product.category_id)
     category=Category.objects.get(pk=category.id).get_ancestors()
-    images = Images.objects.filter(product_id=id)
-    social_links=SocialLinks.objects.filter(product_id=id)
     
-    url=''
-    product_reviews={}
-    for rs in social_links:
-        if rs.name == 'Flipkart':
-            url = rs.link
-            r = requests.get(url)
-            htmlContent = r.content
-            soup = BeautifulSoup(htmlContent,'html.parser')
-            rating = soup.find('div',attrs={'class':'hGSR34 bqXGTW'})
-            rating = rating.text
-            total_no_of_rating = soup.find('span',attrs={'class':'_38sUEc'})
-            total_no_of_rating = total_no_of_rating.text
-            reviews = soup.find_all('div',attrs={'class':'_2t8wE0'})
-            r={}
-            i=0
-            for rs in reviews:
-                r.__setitem__(i,rs.text)
-                i+=1
-
-            product_reviews ={
-                'rating':rating,
-                'total_no_of_rating':total_no_of_rating,
-                'reviews':r,
-            }
     
     liked=check_user_has_prodcut_in_favorites(request,product)
     
-    context = {'product': product,'product_category': category,
-               'images': images,'sociallinks':social_links,'liked_by_user':liked,'product_review':product_reviews
-               }
-
-    if product.variant !="None": # Product have variants
-        if request.method == 'POST': #if we select color
-            variant_id = request.POST.get('variantid')
-            variant = Variants.objects.get(id=variant_id) #selected product by click color radio
-            colors = Variants.objects.filter(product_id=id,size_id=variant.size_id )
-            sizes = Variants.objects.raw('SELECT * FROM  products_variants  WHERE product_id=%s GROUP BY size_id',[id])
-            query += variant.title+' Size:' +str(variant.size) +' Color:' +str(variant.color)
-        else:
-            variants = Variants.objects.filter(product_id=id)
-            colors = Variants.objects.filter(product_id=id,size_id=variants[0].size_id )
-            sizes = Variants.objects.raw('SELECT * FROM  products_variants  WHERE product_id=%s GROUP BY size_id',[id])
-            variant =Variants.objects.get(id=variants[0].id)
-        
-        context.update({'sizes': sizes, 'colors': colors,
-                        'variant': variant,'query': query
-                        })
+    context = {
+                'product':product,
+                # 'title':product_title,
+                'price':product_price,'details':product_detail_list,'image':product_image,'total_no_of_rating':total_no_of_ratiing,
+                'rating':product_rating,'short_description_from_details':short_description_from_details,
+                'short_description':product_short_description,'product_description':product_description,'product_details':product_details,
+                'product_category': category,'liked_by_user':liked,
+            }
     return render(request,'product_details.html',context)
 
 
@@ -164,32 +170,8 @@ def category(request,slug):
             if rs.title == category:
                 category = rs
                 break
-
-        order_by_filter=''
-        filter_stock=''
-        price_from=0
-        price_to=Product.objects.all().aggregate(Max('price'))['price__max']
-
-        if request.GET.get('ordering','') == 'title' or request.GET.get('ordering','') == '-title' or request.GET.get('ordering','') == '-price'  or request.GET.get('ordering','') == 'price':
-            order_by_filter=request.GET.get('ordering','')
-        if request.GET.get('availabel','') == 'In-Stock' or request.GET.get('availabel','') == 'Include-Out-Of-Stock':
-            filter_stock=request.GET.get('availabel','')
-            if request.GET.get('availabel','') == 'Include-Out-Of-Stock':
-                filter_stock=''
-        if request.GET.get('price_from','') != '':
-            price_from=request.GET.get('price_from')
-        if request.GET.get('price_to','') != '':
-            price_to=request.GET.get('price_to')
-
-        if order_by_filter == '' and filter_stock == '':
-            product_list=Product.objects.filter(category_id=category.id,price__range=(price_from,price_to))
-        elif order_by_filter == '' and filter_stock != '':
-            product_list=Product.objects.filter(category_id=category.id,stocks=filter_stock,price__range=(price_from,price_to))
-        elif order_by_filter !='' and filter_stock == '':
-            product_list=Product.objects.filter(category_id=category.id,price__range=(price_from,price_to)).order_by(order_by_filter)
-        elif order_by_filter !='' and filter_stock != ' ':
-            product_list=Product.objects.filter(category_id=category.id,stocks=filter_stock,price__range=(price_from,price_to)).order_by(order_by_filter)
-
+            
+        product_list=Product.objects.filter(category_id=category.id)
         paginator = Paginator(product_list, 15)
         try:
             product_list = paginator.page(page)

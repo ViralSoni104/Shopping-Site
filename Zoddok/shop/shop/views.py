@@ -15,6 +15,7 @@ from django.db.models import Avg, Max, Min, Sum
 from mptt.templatetags.mptt_tags import cache_tree_children, get_cached_trees
 from collections import OrderedDict 
 from .models import FAQ
+from .templatetags.env_extras import get_product_details 
 
 #home page view
 def home(request):
@@ -58,12 +59,12 @@ def contact_view(request):
 def search_auto(request):
     if request.is_ajax():
         q = request.GET.get('search', '')
-        products = Product.objects.filter(title__icontains=q)
+        products = Product.objects.filter(product_title__icontains=q)
 
         results = []
         for rs in products:
             product_json = {}
-            product_json = rs.title
+            product_json = rs.product_title
             results.append(product_json)
         data = json.dumps(results)
     else:
@@ -75,33 +76,10 @@ def search(request):
     if request.method == 'GET':
         query = request.GET.get('search')
         liked={}
-        order_by_filter=''
-        filter_stock=''
-        price_from=0
-        price_to=Product.objects.all().aggregate(Max('price'))['price__max']
-
-        if request.GET.get('ordering','') == 'title' or request.GET.get('ordering','') == '-title' or request.GET.get('ordering','') == '-price'  or request.GET.get('ordering','') == 'price':
-            order_by_filter=request.GET.get('ordering','')
-        if request.GET.get('availabel','') == 'In-Stock' or request.GET.get('availabel','') == 'Include-Out-Of-Stock':
-            filter_stock=request.GET.get('availabel','')
-            if request.GET.get('availabel','') == 'Include-Out-Of-Stock':
-                filter_stock=''
-        if request.GET.get('price_from','') != '':
-            price_from=request.GET.get('price_from')
-        if request.GET.get('price_to','') != '':
-            price_to=request.GET.get('price_to')
+        product_list = Product.objects.filter(product_title__icontains=query)
 
         page = request.GET.get('page', 1)
 
-        if order_by_filter == '' and filter_stock == '':
-            product_list=Product.objects.filter(title__icontains=query,price__range=(price_from,price_to))
-        elif order_by_filter == '' and filter_stock != '':
-            product_list=Product.objects.filter(title__icontains=query,stocks=filter_stock,price__range=(price_from,price_to))
-        elif order_by_filter !='' and filter_stock == '':
-            product_list=Product.objects.filter(title__icontains=query,price__range=(price_from,price_to)).order_by(order_by_filter)
-        elif order_by_filter !='' and filter_stock != ' ':
-            product_list=Product.objects.filter(title__icontains=query,stocks=filter_stock,price__range=(price_from,price_to)).order_by(order_by_filter)
-        
         paginator = Paginator(product_list, 15)
         try:
             product_list = paginator.page(page)

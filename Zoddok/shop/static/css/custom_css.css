@@ -464,3 +464,13 @@ li.sort-link span{
   background-color: #4B97D1;
   color:white;
 }
+.description_table{
+    border: 1px solid black;
+}
+.description_table tr,td{
+    padding: 2px;
+    word-wrap: break-word;
+    text-align: left;
+    line-break: auto;
+    border: 1px solid gray;
+}

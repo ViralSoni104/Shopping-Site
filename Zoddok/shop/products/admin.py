@@ -1,6 +1,6 @@
 from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
-from .models import Product, Category, Color, Size, Images, Variants, SocialLinks
+from .models import Product, Category
 import admin_thumbnails
 # Register your models here.
 
@@ -47,41 +47,12 @@ class CategoryAdmin(DraggableMPTTAdmin):
         queryset.update(status='False')
     make_unpublished.short_description = "Hide Category From User"
 
-class ColorAdmin(admin.ModelAdmin):
-    list_display = ['name','code','color_tag']
-    search_fields = ('name',)
-    list_filter = ('name',)
-
-class SizeAdmin(admin.ModelAdmin):
-    list_display = ['name','code']
-    search_fields = ('name','code')
-    list_filter = ('name','code')
-
-
-class ProductImageInline(admin.TabularInline):
-    model = Images
-    readonly_fields = ('id',)
-    extra = 1
-
-class ProductVariantsInline(admin.TabularInline):
-    model = Variants
-    readonly_fields = ('image_tag',)
-    extra = 1
-    show_change_link = True
-
-class SocialLinksInline(admin.TabularInline):
-    model=SocialLinks
-    readonly_fields=('id',)
-    extra=1
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['title','category', 'status','image_tag']
+    list_display = ['product_title','category', 'status','product_link']
     list_filter = ['category']
-    readonly_fields = ('image_tag',)
-    actions = ['make_published','make_unpublished','make_availabel','make_unavailabel']
-    inlines = [ProductImageInline,ProductVariantsInline,SocialLinksInline]
-    prepopulated_fields = {'slug': ('title',)}
-
+    actions = ['make_published','make_unpublished']
+    prepopulated_fields = {'slug': ('product_title',)}
     def make_published(modeladmin, request, queryset):
         queryset.update(status='True')
     make_published.short_description = "Make Product Visible To User"
@@ -90,26 +61,6 @@ class ProductAdmin(admin.ModelAdmin):
     def make_unpublished(modeladmin, request, queryset):
         queryset.update(status='False')
     make_unpublished.short_description = "Hide Product From User"
-    
-    def make_availabel(modeladmin, request, queryset):
-        queryset.update(stocks='In-Stock')
-    make_availabel.short_description = "Mark Products As In-Stocks"
-    
-
-    def make_unavailabel(modeladmin, request, queryset):
-        queryset.update(stocks='Out-Of-Stock')
-    make_unavailabel.short_description = "Mark Products As Out-Of-Stocks"
-
-class VariantsAdmin(admin.ModelAdmin):
-    list_display = ['title','product','color','size','image_tag']
-
-@admin_thumbnails.thumbnail('image')
-class ImagesAdmin(admin.ModelAdmin):
-    list_display = ['image','title','image_thumbnail']
 
 admin.site.register(Product,ProductAdmin)
-admin.site.register(Images,ImagesAdmin)
-admin.site.register(Variants,VariantsAdmin)
-admin.site.register(Color,ColorAdmin)
-admin.site.register(Size,SizeAdmin)
 admin.site.register(Category, CategoryAdmin)

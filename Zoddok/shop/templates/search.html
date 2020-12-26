@@ -32,17 +32,18 @@
 
 <div class="container">
     <div class="row mb-30">
-        <div class="col-xl-9 col-lg-8 col-md-7">
+        <div class="col-xl-12 col-lg-12 col-md-12">
             
             <!-- End Filter Bar -->
             <!-- Start Best Seller -->
             <section class="lattest-product-area pb-40 category-list">
                 <div class="row">
                     {% for rs in products %}
-                        <div class="col-xl-4 col-lg-6 col-md-12 col-sm-6 single-product">
+                        {% get_product_details rs.product_link as product_detail %}
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 single-product">
                         <div class="content">
                             <div class="content-overlay"></div>
-                                <img class="content-image img-fluid d-block mx-auto custimg" src="{{rs.image.url}}" alt="{{rs.image_alternative_text}}">
+                                <img class="content-image img-fluid d-block mx-auto custimg" src="{{product_detail.image}}">
                             <div class="content-details fadeIn-bottom">
                                     <div class="bottom d-flex align-items-center justify-content-center">
                                         <a href="/product/{{rs.id}}/{{rs.slug}}"><span class="lnr lnr-eye"></span></a>
@@ -55,8 +56,8 @@
                             </div>
                         </div>
                         <div class="price text-center">
-                            <h5>{{rs.title}}</h5>
-                            <h3><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{rs.price}}</h3>
+                            <h5>{{rs.product_title}}</h5>
+                            <h3><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{product_detail.price}}</h3>
                         </div>
                         </div>
                     {% empty %}
@@ -96,40 +97,6 @@
                 {% endif %}
             </div>
             <!-- End Filter Bar -->
-        </div>
-        <div class="col-xl-3 col-lg-4 col-md-5">
-            <div class="sidebar-categories">
-                <div class="head">Show Results For</div>
-                    <ul class="main-categories">
-                       {% for rs in sub_categories %}
-                            <li class="main-nav-list"><a href="{{ rs.get_absolute_url }}"><strong>{{ rs.title|truncatechars:20 }}</strong></a></li><a ></a>
-                       {% endfor %}
-                    </ul>
-            </div>
-            <div class="sidebar-filter mt-50">
-                <div class="top-filter-head">Product Filters</div>
-                <div class="common-filter">
-                    <div class="head">Filter By</div>
-                        <ul>
-                            <li class="filter-list sort-link"><span class="lnr lnr-arrow-right"></span><a href="{% query_transform request.get_full_path 'ordering' 'title' %}">Name A-Z</a></li>
-                            <li class="filter-list sort-link"><span class="lnr lnr-arrow-right"></span><a href="{% query_transform request.get_full_path 'ordering' '-title' %}">Name Z-A</a></li>
-                            <li class="filter-list sort-link"><span class="lnr lnr-arrow-right"></span><a href="{% query_transform request.get_full_path 'ordering' 'price' %}">Price Low to High</a></li>
-                            <li class="filter-list sort-link"><span class="lnr lnr-arrow-right"></span><a href="{% query_transform request.get_full_path 'ordering' '-price' %}">Price High to Low</a></li>
-                            <li class="filter-list sort-link"><span class="lnr lnr-arrow-right"></span><a href="{% query_transform request.get_full_path 'availabel' 'In-Stock' %}">Availbel Only</a></li>
-                            <li class="filter-list sort-link"><span class="lnr lnr-arrow-right"></span><a href="{% query_transform request.get_full_path 'availabel' 'Include-Out-Of-Stock' %}">Include Out of Stock</a></li>
-                        </ul>
-                </div>
-                <div class="common-filter">
-                    <div class="head">Price</div>
-                    <ul>
-                        <li class="filter-list sort-link"><span class="lnr lnr-arrow-right"></span><a href="{% query_transform request.get_full_path 'price_to' '1000' as c%}{% remove_to c 'price_from' %}">Under<i class="fa fa-inr mr-0 ml-5" aria-hidden="true"></i>1000</a></li>
-                        <li class="filter-list sort-link"><span class="lnr lnr-arrow-right"></span><a href="{% query_transform request.get_full_path 'price_from' '1000' as c %}{% query_transform c 'price_to' '5000' %}"><i class="fa fa-inr mr-0" aria-hidden="true"></i>1000  -  <i class="fa fa-inr mr-0" aria-hidden="true"></i>5000</a></li>
-                        <li class="filter-list sort-link"><span class="lnr lnr-arrow-right"></span><a href="{% query_transform request.get_full_path 'price_from' '5000' as c %}{% query_transform c 'price_to' '10000' %}"><i class="fa fa-inr mr-0" aria-hidden="true"></i>5000  -  <i class="fa fa-inr mr-0" aria-hidden="true"></i>10000</a></li>
-                        <li class="filter-list sort-link"><span class="lnr lnr-arrow-right"></span><a href="{% query_transform request.get_full_path 'price_from' '10000' as c %}{% query_transform c 'price_to' '20000' %}"><i class="fa fa-inr mr-0" aria-hidden="true"></i>10000  -  <i class="fa fa-inr mr-0" aria-hidden="true"></i>20000</a></li>
-                        <li class="filter-list sort-link"><span class="lnr lnr-arrow-right"></span><a href="{% query_transform request.get_full_path 'price_from' '20000' as c%}{% remove_to c 'price_to' %}">Over<i class="fa fa-inr mr-0 ml-5" aria-hidden="true"></i>20000</a></li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </div>
 </div>

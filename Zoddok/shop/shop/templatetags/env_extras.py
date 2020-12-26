@@ -9,6 +9,9 @@ from urllib.parse import urlencode
 import string
 from shop.models import Team
 from django.urls import reverse
+import requests
+from bs4 import BeautifulSoup
+
 
 register = template.Library()
 
@@ -26,6 +29,27 @@ def get_site_setting():
     Site_Setting=SiteSetting.objects.all().order_by('-id')[:1]
     Site_Setting=Site_Setting[0]
     return Site_Setting
+
+
+@register.simple_tag
+def get_product_details(product_link):
+    r = requests.get(product_link)
+    htmlContent = r.content
+    soup = BeautifulSoup(htmlContent,'html.parser')
+    # product_title = soup.find('span',attrs={'class':'B_NuCI'}).text
+    product_price = soup.find('div',attrs={'class':'_30jeq3 _16Jk6d'}).text
+    product_detail_list = soup.find('script',attrs={'id':'jsonLD'},type='application/ld+json')
+    json_data = json.loads(product_detail_list.string)
+    product_image  = json_data[0]['image']
+
+    rs={
+        # 'title':product_title,
+        'price':product_price,'image':product_image,
+    }
+    return rs
+
+
+
 
 @register.filter(name='times') 
 def times(number):

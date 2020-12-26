@@ -81,10 +81,11 @@
         </div>
         <div class="row ">
             {% for rs in featured_products %}
+                {% get_product_details rs.product_link as product_detail %}
                 <div class="col-lg-3 col-md-6 single-product mb-30">
                 <div class="content">
                     <div class="content-overlay"></div>
-                        <img class="content-image img-fluid d-block mx-auto custimg" src="/media/{{rs.image}}" alt="{{rs.image_alternative_text}}">
+                        <img class="content-image img-fluid d-block mx-auto custimg" src="{{product_detail.image}}">
                     <div class="content-details fadeIn-bottom">
                             <div class="bottom d-flex align-items-center justify-content-center">
                                 <a href="/product/{{rs.id}}/{{rs.slug}}"><span class="lnr lnr-eye"></span></a>
@@ -97,14 +98,8 @@
                     </div>
                 </div>
                 <div class="price">
-                        <h5 class="text-white text-center">{{rs.title}}</h5>
-                        <h3 class="text-white text-center"><span class="fa fa-inr"></span>{{rs.sell_price}}</h3>
-                        {% if rs.sell_price != rs.price %}
-                            <div class="mt-2 container text-center discountdiv">
-                                <del class="text-white"><span class="fa fa-inr"></span>{{rs.price}}</del>
-                                <span class="ml-3 text-white">{{rs.flat_off_discount}}% off</span>
-                            </div>
-                        {% endif %}
+                    <h5 class="text-white text-center">{{rs.product_title}}</h5>
+                    <h3 class="text-white text-center">{{product_detail.price}}</h3>
                 </div>
                 </div>
             {% endfor %}																
@@ -120,10 +115,11 @@
         </div>
         <div class="row">
             {% for rs in latest_products %}
+                {% get_product_details rs.product_link as product_detail %}
                 <div class="col-lg-3 col-md-6 single-product">
                 <div class="content">
                     <div class="content-overlay"></div>
-                        <img class="content-image custimg img-fluid d-block mx-auto" src="/media/{{rs.image}}" alt="{{rs.image_alternative_text}}">
+                        <img class="content-image custimg img-fluid d-block mx-auto" src="{{product_detail.image}}">
                     <div class="content-details fadeIn-bottom">
                             <div class="bottom d-flex align-items-center justify-content-center">
                                 <a href="/product/{{rs.id}}/{{rs.slug}}"><span class="lnr lnr-eye"></span></a>
@@ -136,14 +132,8 @@
                     </div>
                 </div>
                 <div class="price">
-                        <h5 class="text-center">{{rs.title}}</h5>
-                        <h3 class="text-center"><span class="fa fa-inr"></span>{{rs.sell_price}}</h3>
-                        {% if rs.sell_price != rs.price %}
-                            <div class="mt-2 container text-center discountdiv">
-                                <del class="catdel"><span class="fa fa-inr"></span>{{rs.price}}</del>
-                                <span class="ml-3 catins">{{rs.flat_off_discount}}% off</span>
-                            </div>
-                        {% endif %}
+                    <h5 class="text-center">{{rs.product_title}}</h5>
+                    <h3 class="text-center">{{product_detail.price}}</h3>
                 </div>						  
                 </div>
             {% endfor %}																			
