@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import requests
 from bs4 import BeautifulSoup
-
+import string
 
 # Create your views here.
 def get_categories():
@@ -65,8 +65,15 @@ def product_detail(request,id,slug):
     product_detail_list = soup.find('script',attrs={'id':'jsonLD'},type='application/ld+json')
     json_data = json.loads(product_detail_list.string)
     product_image  = json_data[0]['image']
+
+    #manually change resolution data in url
+    product_image_data = product_image.split('/')
+    product_image_data[4] = '880'
+    product_image_data[5] = '1056'
+    product_image = '/'.join(product_image_data)
+    
     product_rating = json_data[0]['aggregateRating']['ratingValue']
-    product_total_no_of_reviews = json_data[0]['aggregateRating']['reviewCount']
+    # product_total_no_of_reviews = json_data[0]['aggregateRating']['reviewCount']
     
 
     product_description = {}

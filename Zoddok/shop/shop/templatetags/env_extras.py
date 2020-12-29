@@ -42,6 +42,12 @@ def get_product_details(product_link):
     json_data = json.loads(product_detail_list.string)
     product_image  = json_data[0]['image']
 
+    #manually change resolution data in url
+    product_image_data = product_image.split('/')
+    product_image_data[4] = '880'
+    product_image_data[5] = '1056'
+    product_image = '/'.join(product_image_data)
+    
     rs={
         # 'title':product_title,
         'price':product_price,'image':product_image,
