@@ -49,8 +49,20 @@ def check_list_of_prodcut_favorite(request,liked,product_list):
             liked[p.id]=like
     return liked
 
+
+def change_image_resolution(product_image,res1,res2,qualtiy):
+    product_image_data = product_image.split('/')
+    product_image_data[4] = res1
+    product_image_data[5] = res2
+    product_image_quality = product_image_data[11].split('=')
+    product_image_quality[1] = qualtiy
+    product_image_quality = '='.join(product_image_quality)
+    product_image_data[11] = product_image_quality
+    product_image = '/'.join(product_image_data)
+    return product_image
+
 def product_detail(request,id,slug):
-    #query = request.GET.get('q')
+    query = request.GET.get('color')
     try:
         product = Product.objects.get(pk=id)
     except:
@@ -67,10 +79,7 @@ def product_detail(request,id,slug):
     product_image  = json_data[0]['image']
 
     #manually change resolution data in url
-    product_image_data = product_image.split('/')
-    product_image_data[4] = '880'
-    product_image_data[5] = '1056'
-    product_image = '/'.join(product_image_data)
+    product_image = change_image_resolution(product_image,'880','1056','70')
     
     product_rating = json_data[0]['aggregateRating']['ratingValue']
     # product_total_no_of_reviews = json_data[0]['aggregateRating']['reviewCount']
@@ -106,6 +115,20 @@ def product_detail(request,id,slug):
     for i, detail in enumerate(details):
         product_details[detail_headers[i].text.strip()] = detail.text.strip()
 
+    colors_image_list_div = soup.findAll('div',attrs={'class':'_2C41yO _1pH70n _31hAvz'})
+    colors_image_list_name_div = soup.findAll('div',attrs={'class':'_3Oikkn _3_ezix _2KarXJ _31hAvz'})
+    colors_all_images= {}
+    colors_name = ''
+    for n,i in enumerate(colors_image_list_div):
+        colors_images = change_image_resolution(i['data-img'],'180','180','50')
+        colors_all_images[colors_image_list_name_div[n].text.strip()] = colors_images
+        colors_name =colors_name+' '+colors_image_list_name_div[n].text.strip()
+
+    
+    size_list_anchor = soup.findAll('a',attrs={'class':'_1fGeJ5 _2UVyXR _31hAvz'})
+    all_size_list= []
+    for i in size_list_anchor:
+        all_size_list.append(i.text)
 
     category = Category.objects.get(pk=product.category_id)
     category=Category.objects.get(pk=category.id).get_ancestors()
@@ -116,11 +139,16 @@ def product_detail(request,id,slug):
     context = {
                 'product':product,
                 # 'title':product_title,
-                'price':product_price,'details':product_detail_list,'image':product_image,'total_no_of_rating':total_no_of_ratiing,
+                'price':product_price,'details':product_detail_list,'total_no_of_rating':total_no_of_ratiing,
                 'rating':product_rating,'short_description_from_details':short_description_from_details,
                 'short_description':product_short_description,'product_description':product_description,'product_details':product_details,
-                'product_category': category,'liked_by_user':liked,
+                'product_category': category,'liked_by_user':liked,'colors':colors_all_images,'sizes':all_size_list,
             }
+    if query is not None and query!='' and query in colors_name:
+        color_image = change_image_resolution(colors_all_images[query],'880','1056','70')
+        context.update({'image':color_image})
+    else:
+        context.update({'image':product_image})
     return render(request,'product_details.html',context)
 
 

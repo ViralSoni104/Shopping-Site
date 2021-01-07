@@ -44,8 +44,8 @@ def get_product_details(product_link):
 
     #manually change resolution data in url
     product_image_data = product_image.split('/')
-    product_image_data[4] = '880'
-    product_image_data[5] = '1056'
+    product_image_data[4] = '320'
+    product_image_data[5] = '480'
     product_image = '/'.join(product_image_data)
     
     rs={

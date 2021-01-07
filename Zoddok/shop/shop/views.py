@@ -21,7 +21,7 @@ from .templatetags.env_extras import get_product_details
 def home(request):
     category=Category.objects.filter(feature_to_home_page='Yes')
     latest_products=Product.objects.all().order_by('-id')[:4]
-    featured_products=Product.objects.filter(feature_to_home_page='Yes')
+    featured_products=Product.objects.filter(feature_to_home_page='Yes')[:4]
     liked={}
     liked=check_list_of_prodcut_favorite(request,liked,latest_products)
     liked=check_list_of_prodcut_favorite(request,liked,featured_products)

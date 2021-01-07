@@ -344,7 +344,7 @@ li.sort-link span{
 .resp-sharing-button__link {
   text-decoration: none;
   color: #fff;
-  margin: 0.5em
+  margin: 0.5em 0.5em 0.5em 0em;
 }
 
 .resp-sharing-button {
@@ -466,6 +466,7 @@ li.sort-link span{
 }
 .description_table{
     border: 1px solid black;
+    width: 100%;
 }
 .description_table tr,td{
     padding: 2px;
