@@ -123,7 +123,7 @@
         <footer class="footer-area section-gap">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-4  col-md-6 col-sm-6">
+                    <div class="col-lg-3  col-md-6 col-sm-6">
                         <div class="single-footer-widget">
                             <h6>About Us</h6>
                             <p>
@@ -131,7 +131,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-lg-4  col-md-6 col-sm-6">
+                    <div class="col-lg-3  col-md-6 col-sm-6">
                         <div class="single-footer-widget">
                             <h6>Contact Us</h6>
                             <p>
@@ -146,8 +146,15 @@
                             
                         </div>
                     </div>                      
-                    
-                    <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="col-lg-3  col-md-6 col-sm-6">
+                        <div class="single-footer-widget mail-chimp">
+                            <h6 class="mb-20">Instragram Feed</h6>
+                            <ul class="instafeed d-flex flex-wrap">
+                                <!--Insta feed will be appended here using ajax-->
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
                         <div class="single-footer-widget">
                             <h6>Follow Us</h6>
                             <p>Let us be social</p>
@@ -184,6 +191,21 @@
             $(document).ready(function(){
                 $(".nice-select").hide();
                 $("#cats").show();
+                $.ajax({
+                    url:"{% get_site_setting as site %}{{ site.Instagram_Account }}?__a=1",
+                    type:'get',
+                    success:function(response){
+                    posts = response.graphql.user.edge_owner_to_timeline_media.edges;
+                    posts_html = '';
+                    for(var i=0;i<12;i++){
+                        url = posts[i].node.display_url;
+                        likes = posts[i].node.edge_liked_by.count;
+                        comments = posts[i].node.edge_media_to_comment.count;
+                        posts_html+="<li><img class='img-responsive' src='"+url+"' alt='' style='width:60px;height:auto;'></li>";
+                    }
+                        $(".instafeed").html(posts_html);
+                    }
+                });
                 
             });
             $(function() {
