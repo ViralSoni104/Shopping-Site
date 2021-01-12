@@ -49,7 +49,7 @@ class CategoryAdmin(DraggableMPTTAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['product_title','category', 'status','product_link']
+    list_display = ['product_title','category', 'status','feature_to_home_page']
     list_filter = ['category']
     actions = ['make_published','make_unpublished']
     prepopulated_fields = {'slug': ('product_title',)}

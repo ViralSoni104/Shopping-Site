@@ -45,6 +45,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
     {% block custom_css_and_links %}
     {% endblock %}
+    <style>
+        a.links_menu{
+            text-decoration: none;
+            color: gray;
+        }
+        a.links_menu:hover{
+            text-decoration: none;
+            color: white;
+        }
+    </style>
     </head>
     <body>
 
@@ -148,10 +158,13 @@
                     </div>                      
                     <div class="col-lg-3  col-md-6 col-sm-6">
                         <div class="single-footer-widget mail-chimp">
-                            <h6 class="mb-20">Instragram Feed</h6>
-                            <ul class="instafeed d-flex flex-wrap">
-                                <!--Insta feed will be appended here using ajax-->
-                            </ul>
+                            <h6 class="mb-20">Important Links</h6>
+                            <div class="footer-social">
+                                <a href="{% url 'faq' %}" class="links_menu">FAQ</a><br/><br/>
+                                <a href="{% url 'about' %}" class="links_menu">About</a><br/><br/>
+                                <a href="{% url 'contact' %}" class="links_menu">Contact</a><br/><br/>
+                                <a href="{% url 'accounts' %}" class="links_menu">Account</a>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-6">
@@ -191,22 +204,6 @@
             $(document).ready(function(){
                 $(".nice-select").hide();
                 $("#cats").show();
-                $.ajax({
-                    url:"{% get_site_setting as site %}{{ site.Instagram_Account }}?__a=1",
-                    type:'get',
-                    success:function(response){
-                    posts = response.graphql.user.edge_owner_to_timeline_media.edges;
-                    posts_html = '';
-                    for(var i=0;i<12;i++){
-                        url = posts[i].node.display_url;
-                        likes = posts[i].node.edge_liked_by.count;
-                        comments = posts[i].node.edge_media_to_comment.count;
-                        posts_html+="<li><img class='img-responsive' src='"+url+"' alt='' style='width:60px;height:auto;'></li>";
-                    }
-                        $(".instafeed").html(posts_html);
-                    }
-                });
-                
             });
             $(function() {
                 $("#search").autocomplete({

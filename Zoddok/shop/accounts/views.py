@@ -329,7 +329,7 @@ def loginUser(request):
             if request.POST.get('otp') is None or request.POST.get('password') is None:
                 password_or_otp_error=Custom_Msg.FIELD_REQUIRE_ERR_MSG
            
-            return render(request,'accounts.html',{'form':form,'password_or_otp_error':password_or_otp_error,'email_error':email_error,'otp_send_mail':otp_send_mail,'category':json.loads(category)})
+            return render(request,'accounts.html',{'form':form,'password_or_otp_error':password_or_otp_error,'email_error':email_error,'otp_send_mail':otp_send_mail})
     else:
         return render(request,'accounts.html',{'form':form})
 
