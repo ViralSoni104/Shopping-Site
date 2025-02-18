@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load mptt_tags %}
+{% load env_extras %}
+{% load static %}
+
+
+{% block meta_tags %}
+    <!-- Author Meta -->
+    <meta name="author" content="">
+    <!-- Meta Description -->
+    <meta name="description" content="{% get_site_setting as site %}{{ site.home_page_meta_description }}">
+    <!-- Meta Keyword -->
+    <meta name="keywords" content="{% get_site_setting as site %}{{ site.home_page_meta_keywords }}">
+{% endblock %}
+
+{% block title_tag %}{% get_site_setting as site %}{{ site.home_page_title }}{% endblock %}
+
+{% block custom_css_and_links %}{% endblock %}
+
+{% block breadcrum %}
+
+{% endblock %}
+{% block content %}
+
+<section class="banner-area relative" id="home">
+    <div class="container-fluid">
+        <div class="row fullscreen align-items-center justify-content-center">
+            <div class="col-lg-6 col-md-12 d-flex align-self-end img-right no-padding">
+                <img class="img-fluid" src="/media/{% get_site_setting as site %}{{ site.Home_Page_Banner }}" alt="{% get_site_setting as site %}{{ site.Home_Page_Banner_Alternative_Text }}">
+            </div>
+            <div class="banner-content col-lg-6 col-md-12">
+                <h1 class="title-top">{% get_site_setting as site %}{{ site.Home_Page_Small_Text}}</h1>
+                <h1 class="text-uppercase">
+                    {% get_site_setting as site %}{{ site.Home_Page_Big_Text }}
+                </h1>
+            </div>							
+        </div>
+    </div>
+</section>
+<section class="category-area section-gap section-gap" id="catagory">
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="menu-content pb-40">
+                <div class="title text-center">
+                    <h1 class="mb-10">Shop for Different Categories</h1>
+                </div>
+            </div>
+        </div>					
+        <div class="row">
+            <div class="col-lg-12 col-md-12 mb-10">
+                <div class="row category-bottom">
+                    {% for top in featured_category %}
+                        <div class="col-lg-3 col-md-3 mb-30">
+                            <div class="content">
+                                <a href="{{top.get_absolute_url}}" target="_blank">
+                                    <div class="content-overlay"></div>
+                                        <img class="content-image img-fluid d-block mx-auto img-responsive custimg d-flex" src="/media/{{top.image}}" alt="{{top.image_alternative_text}}">
+                                    <div class="content-details fadeIn-bottom">
+                                        <h3 class="content-title">{{top.title}}</h3>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}															
+                </div>							
+            </div>
+            				
+        </div>
+    </div>	
+</section>
+<section class="men-product-area section-gap relative" id="men">
+    <div class="overlay overlay-bg"></div>
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="menu-content pb-40">
+                <div class="title text-center">
+                    <h1 class="text-white mb-10">Featured Products</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row ">
+            {% for rs in featured_products %}
+                {% get_product_details rs.product_link as product_detail %}
+                <div class="col-lg-3 col-md-6 single-product mb-30">
+                <div class="content">
+                    <div class="content-overlay"></div>
+                        <img class="content-image img-fluid d-block mx-auto custimg" src="{{product_detail.image}}">
+                    <div class="content-details fadeIn-bottom">
+                            <div class="bottom d-flex align-items-center justify-content-center">
+                                <a href="/product/{{rs.id}}/{{rs.slug}}"><span class="lnr lnr-eye"></span></a>
+                                {% if rs.id in liked_by_user %}
+                                    <a href="{% url 'add-favorite' rs.id %}"><span class="fa fa-heart"></span></a>
+                                {% else %}
+                                    <a href="{% url 'add-favorite' rs.id %}"><span class="fa fa-heart-o"></span></a>
+                                {% endif %}
+                            </div>
+                    </div>
+                </div>
+                <div class="price">
+                    <h5 class="text-white text-center">{{rs.product_title}}</h5>
+                    <h3 class="text-white text-center">{{product_detail.price}}</h3>
+                </div>
+                </div>
+            {% endfor %}																
+        </div>
+    </div>	
+</section>
+<section class="women-product-area section-gap" id="women">
+    <div class="container">
+        <div class="countdown-content pb-40">
+            <div class="title text-center">
+                <h1 class="mb-10">New realeased Products</h1>
+            </div>
+        </div>
+        <div class="row">
+            {% for rs in latest_products %}
+                {% get_product_details rs.product_link as product_detail %}
+                <div class="col-lg-3 col-md-6 single-product">
+                <div class="content">
+                    <div class="content-overlay"></div>
+                        <img class="content-image custimg img-fluid d-block mx-auto" src="{{product_detail.image}}">
+                    <div class="content-details fadeIn-bottom">
+                            <div class="bottom d-flex align-items-center justify-content-center">
+                                <a href="/product/{{rs.id}}/{{rs.slug}}"><span class="lnr lnr-eye"></span></a>
+                                {% if rs.id in liked_by_user %}
+                                    <a href="{% url 'add-favorite' rs.id %}"><span class="fa fa-heart"></span></a>
+                                {% else %}
+                                    <a href="{% url 'add-favorite' rs.id %}"><span class="fa fa-heart-o"></span></a>
+                                {% endif %}
+                            </div>
+                    </div>
+                </div>
+                <div class="price">
+                    <h5 class="text-center">{{rs.product_title}}</h5>
+                    <h3 class="text-center">{{product_detail.price}}</h3>
+                </div>						  
+                </div>
+            {% endfor %}																			
+        </div>
+    </div>	
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/nouislider.min.js' %}"></script>
+<script>
+    var toasted = new Toasted({
+        position : 'bottom-center',
+        theme : 'primary',
+        duration:5000,
+        className:'toastClass',
+        fullWidth:true,
+    })
+</script>
+{% if messages %}
+    {% for message in messages %}
+            <script>toasted.show("<span class='toast-content'><span class='fa fa-check-circle' style='color:#55efc4;'></span>&nbsp;&nbsp;{{message}}<span>")</script>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load env_extras %}
+
+{% block meta_tags %}
+    
+{% endblock %}
+
+{% block title_tag %}{% get_site_setting as site %}{{ site.favourite_list_page_title }}{% endblock %}
+
+{% block custom_css_and_links %}
+    
+{% endblock %}
+
+{% block breadcrum %}
+<section class="banner-area organic-breadcrumb">
+    <div class="container mt-lg-0 mt-md-120 mt-120 mt-sm-200">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center">
+            <div class="col-lg-12 col-xs-12 col-first col-sm-12 d-flex flex-wrap align-items-center">
+                <a href="{% url 'home'%}">Home&nbsp;&nbsp;<i class="fa fa-caret-right" aria-hidden="true"></i>&nbsp;</a>
+                <a href="{% url 'your-favorites' %}">Your Favorites</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5 mb-5">
+    <div class="cart-title">
+        <div class="row">
+            <div class="col-md-8">
+                <h6 class="ml-15">Product(<span>{{ products|var_length|add:"1" }}</span>)</h6>
+            </div>
+            <div class="col-md-2">
+                <h6>Price</h6>
+            </div>
+            <div class="col-md-2">
+                <h6></h6>
+            </div>
+        </div>
+    </div>
+    {% for rs in products %}
+        {% get_product_details rs.product_link as product_detail %}
+        <div class="cart-single-item">
+            <div class="row align-items-center">
+                <div class="col-md-8 col-12">
+                    <div class="product-item d-flex align-items-center">
+                        <img src="{{product_detail.image}}" class="favlist-img img-fluid img-responsive">
+                        <h6>{{ rs.product_title }}</h6>
+                    </div>
+                </div>
+                <div class="col-md-2 col-6 mb-3 mt-3">
+                    <div class="price"><span class="fa fa-inr"></span>{{ product_detail.price }}</div>
+                </div>
+                <div class="d-flex col-md-2 col-6">
+                    <a href="{% url 'add-favorite' rs.id %}" class="btn btn-danger mr-4"><span class="fa fa-trash-o" aria-hidden="true"></span></a>
+                    <a href="{% url 'product-details' rs.id rs.slug %}" class="btn btn-primary"><span class="fa fa-eye" aria-hidden="true"></span></a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var toasted = new Toasted({
+        position : 'bottom-center',
+        theme : 'primary',
+        duration:5000,
+        className:'toastClass',
+        fullWidth:true,
+    })
+</script>
+{% if messages %}
+    {% for message in messages %}
+            <script>toasted.show("<span class='toast-content'><span class='fa fa-check-circle' style='color:#55efc4;'></span>&nbsp;&nbsp;{{message}}<span>")</script>
+    {% endfor %}
+{% endif %}
+{% endblock %}

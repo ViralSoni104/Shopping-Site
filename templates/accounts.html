@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load env_extras %}
+{% block meta_tags %}
+
+{% endblock %}
+
+{% block title_tag %}{% get_site_setting as site %}{{ site.account_page_title }}{% endblock %}
+
+{% block custom_css_and_links %}
+
+{% endblock %}
+
+{% block breadcrum %}
+<section class="banner-area organic-breadcrumb">
+  <div class="container mt-lg-0 mt-md-120 mt-120 mt-sm-200">
+      <div class="breadcrumb-banner d-flex flex-wrap align-items-center">
+          <div class="col-lg-12 col-xs-12 col-first col-sm-12 d-flex flex-wrap align-items-center">
+              <a href="{% url 'home'%}">Home&nbsp;&nbsp;<i class="fa fa-caret-right" aria-hidden="true"></i>&nbsp;</a>
+              <a href="{% url 'accounts'%}">Accounts</a>
+          </div>
+      </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="container">
+    <div class="row success-messages">
+      {% if messages %}
+        {% for message in messages %}
+          {% if  message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+            <span class="text-center"><i class="fa fa-check-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;{{message}}</span>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+  <div class="row account-form">
+    <div class="col-md-6">
+      <div class="login-form">
+        <h3 class="billing-title text-center">Login</h3>
+        <p class="text-center mt-40 mb-40 account-sub-title">Welcome back! Sign in to your account </p>
+        <form action="{% url 'login' %}" method="POST">
+          {% csrf_token %}
+          <label for="email">Email <span class="error">*</span></label>
+          {% if otp_send_mail %}
+            {{otp_send_mail}} <a href="{% url 'accounts'%}">Change Email</a>
+            <input type="hidden" id="email" name="email" value="{{otp_send_mail}}" required class="common-input mt-20">
+            <br/>
+          {% else %}
+            <input type="email" id="email" name="email" placeholder="Enter your email*" onfocus="this.placeholder=''" onblur="this.placeholder = 'Enter your email*'" required class="common-input mt-20">
+          {% endif %}
+          <span class="error" id="email_error">
+            {% if email_error %}
+              {{email_error}}
+            {% endif %}
+            {% if user_not_exsist %}
+              {{user_not_exsist}}
+            {% endif %}
+          </span>
+          <br/><br/>
+          {% if otp_send_mail %}
+          {% else %}
+          <label for="password">Password <span class="error">*</span></label>
+          <div class="passtrengthMeter login_pass">
+            <input type="password" id="password" name="password" placeholder="Enter your password*" onfocus="this.placeholder=''" onblur="this.placeholder = 'Enter your password*'"  class="common-input mt-20">
+            <a href=""><span class="showPassword">
+              <img src="/media/img/eye.svg">
+            </span></a>
+          </div>
+          {% endif %}
+          {% if otp_send_mail %}
+          <label for="otp">Login Code <span class="error">*</span></label>
+          <input type="text" id="otp" name="otp" placeholder="Enter your Login code*" onfocus="this.placeholder=''" onblur="this.placeholder = 'Enter your Login code*'"  class="common-input mt-20">
+          <span class="help-text">Login code wich have been sent on your given email address.</span>
+          <br/>
+          {% endif %}
+          <span class="error">
+            {% if password_or_otp_error %}
+              {{password_or_otp_error}}
+            {% endif %}
+            {% if invalid_creds_error %}
+              {{invalid_creds_error}}
+            {% endif %}
+          </span>
+          <span class="success">
+            {% if resend_code_sent %}
+              <i class="fa fa-check-circle-o" aria-hidden="true"></i>&nbsp;&nbsp;{{resend_code_sent}}
+            {% endif %}
+          </span>
+          <br/><br/>
+          <button class="view-btn color-2 mt-20 w-100" name='login' value="login">
+              <span>Login
+              </span>
+          </button>
+          {% if otp_send_mail %}
+             <button class="view-btn color-2 mt-20 w-100" name='resendcode' value="resendcode"><span>Resend Login Code</span></button>
+             <a href="" class="d-flex justify-content-center align-items-center mt-20">Back to login with password</a>
+          {% else %}
+          <button class="view-btn color-2 mt-20 w-100" name='otplogin' value="otplogin"><span>Request Login Code</span></button>
+          <div class="mt-20 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center"><input type="checkbox" class="pixel-checkbox" id="remember_me" name="remember_me">
+            <label for="login-1">Keep me logged in.</label></div>
+            <a href="{% url 'forget-password' %}">Forget your password?</a>
+          </div>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="login-form">
+        <h3 class="billing-title text-center">Register</h3>
+        <p class="text-center mt-40 mb-30 account-sub-title">Create your very own account </p>
+        <form action="{% url 'signup' %}" method="POST">  
+          {% csrf_token %}
+          {% for field in form %}
+              <label for="{{ field.name }}">{{ field.label }} <span class="error">*</span></label>
+              
+              {% if field.name == 'email'  %}
+                {{ field }}
+                <span class="error" id="reg_email_error"></span>
+              {% endif %}
+              {% if field.name == 'password1'  %}
+              <div class="passtrengthMeter pass">
+                <input type="password" name="password1" class="common-input" required="" id="id_password1">
+                <a href=""><span class="showPassword">
+                  <img src="/media/img/eye.svg">
+                </span></a>
+              </div>
+              {% endif %}
+              {% if field.name == 'password2'  %}
+                <div class="passtrengthMeter re_pass">
+                  <input type="password" name="password2" class="common-input" required="" id="id_password2">
+                  <a href=""><span class="showPassword">
+                    <img src="/media/img/eye.svg">
+                  </span></a>
+                </div>
+              {% endif %}
+              <p class="help-text">{{ field.help_text }} </p>
+              {% for error in field.errors %}
+                <span class="error" id="field_errors">{{ error }}</span><br/>
+              {% endfor %}
+          {% endfor %}
+          <span class="error" id="pass_error"></span>
+          <span class="error" id="comman_pass_error"></span>
+          <span class="error" id="numeric_pass_error"></span>
+          <span class="error" id="confirm_pass_error"></span>
+          <button type="submit" class="view-btn color-2 mt-20 w-100"><span>Register</span></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{% static 'js/accounts.js' %}"></script> 
+<script>
+  validate_email("#email","#email_error");//login email
+  validate_email("#id_email","#reg_email_error");//registration email
+  password_check("#id_password1","#id_password2");// all email
+  //pass show and strength pulgin
+  $(document).ready(function($) {
+    $('#id_password1').passtrength({
+      minChars:8,
+      passwordToggle: false,
+      tooltip: true,
+    });
+  });
+  $(document).ready(function() {
+    showPass_func('re_pass',"#id_password2");
+  });
+  $(document).ready(function() {
+    showPass_func('pass',"#id_password1");
+  });
+  $(document).ready(function() {
+    showPass_func('login_pass',"#password");
+  });
+</script>
+{% endblock %}

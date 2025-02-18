@@ -1,0 +1,6 @@
+{% load static %}
+{% load mptt_tags %}
+{% load env_extras %}
+{% for node in category %}
+    <a class="dropdown-item" href="{{node.get_absolute_url}}">{{node.title}}</a>
+{% endfor %}

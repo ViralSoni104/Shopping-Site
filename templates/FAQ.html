@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load mptt_tags %}
+{% load env_extras %}
+
+{% block meta_tags %}
+    <!-- Author Meta -->
+    <meta name="author" content="">
+    <!-- Meta Description -->
+    <meta name="description" content="{% get_site_setting as site %}{{ site.faq_page_meta_description }}">
+    <!-- Meta Keyword -->
+    <meta name="keywords" content="{% get_site_setting as site %}{{ site.faq_page_meta_keywords }}">
+{% endblock %}
+
+{% block title_tag %}{% get_site_setting as site %}{{ site.faq_page_title }}{% endblock %}
+
+{% block custom_css_and_links %}
+{% endblock %}
+
+{% block breadcrum %}
+<section class="banner-area organic-breadcrumb">
+    <div class="container mt-lg-0 mt-md-120 mt-120 mt-sm-200">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center">
+            <div class="col-lg-12 col-xs-12 col-first col-sm-12 d-flex flex-wrap align-items-center">
+                <a href="{% url 'home'%}">Home&nbsp;&nbsp;<i class="fa fa-caret-right" aria-hidden="true"></i>&nbsp;</a>
+                <a href="{% url 'faq'%}">Frequently Asked Questions</a>
+            </div>
+        </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block content %}
+
+<div class="container mb-5 ">
+    <div class="container">
+        <h1 class="title faqtitle">Frequently Asked Questions</h1>
+        <div id="accordion" class="accordion mt-4">
+            <div class="card mb-0">
+                {% for rs in faq %}
+                <div class="card-header collapsed" data-toggle="collapse" href="#{{rs.position_number}}">
+                    <a class="card-title">
+                        Q.&nbsp;&nbsp;{{ rs.question }}
+                    </a>
+                </div>
+                <div id="{{rs.position_number}}" class="card-body collapse" data-parent="#accordion" >
+                    <p>
+                        Answer:&nbsp;&nbsp;{{ rs.answer | safe }}
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load env_extras %}
+{% load mptt_tags %}
+
+{% block meta_tags %}
+{% endblock %}
+
+{% block title_tag %}
+    {{sitemap}} -  Buy Products On Zoddok Clothing
+{% endblock %}
+
+{% block custom_css_and_links %}
+
+{% endblock %}
+
+{% block breadcrum %}
+<section class="banner-area organic-breadcrumb relative">
+    <div class="container mt-lg-0 mt-md-120 mt-120 mt-sm-200">
+        <div class="breadcrumb-banner d-flex align-items-center">
+            <div class="col-lg-12 col-xs-12 col-first col-sm-12 align-items-center">
+                <a href="{% url 'home'%}">Home&nbsp;&nbsp;<i class="fa fa-caret-right" aria-hidden="true"></i>&nbsp;</a>
+                <a>Showing Search Result For "{{sitemap}}"&nbsp;&nbsp;</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row mb-30">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            
+            <!-- End Filter Bar -->
+            <!-- Start Best Seller -->
+            <section class="lattest-product-area pb-40 category-list">
+                <div class="row">
+                    {% for rs in products %}
+                        {% get_product_details rs.product_link as product_detail %}
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 single-product">
+                        <div class="content">
+                            <div class="content-overlay"></div>
+                                <img class="content-image img-fluid d-block mx-auto custimg" src="{{product_detail.image}}">
+                            <div class="content-details fadeIn-bottom">
+                                    <div class="bottom d-flex align-items-center justify-content-center">
+                                        <a href="/product/{{rs.id}}/{{rs.slug}}"><span class="lnr lnr-eye"></span></a>
+                                        {% if rs.id in liked_by_user %}
+                                            <a href="{% url 'add-favorite' rs.id %}"><span class="fa fa-heart"></span></a>
+                                        {% else %}
+                                            <a href="{% url 'add-favorite' rs.id %}"><span class="fa fa-heart-o"></span></a>
+                                        {% endif %}
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="price text-center">
+                            <h5>{{rs.product_title}}</h5>
+                            <h3>{{product_detail.price}}</h3>
+                        </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 single-product">
+                            <div class="content">
+                                <div class="text-center">
+                                    <i class="mr-20 mb-20 fa fa-5x fa-exclamation-triangle" aria-hidden="true"></i>
+                                    <br/>
+                                    <span class="no-result">
+                                        Sorry, No result found
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}																															
+                </div>
+            </section>
+            <div class="filter-bar d-flex flex-wrap align-items-center">
+                {% if products.has_other_pages %}
+                    <div class="pagination">
+                        {% if products.has_previous %}
+                            <a href="?page={{ products.previous_page_number }}" class="prev-arrow"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></a>
+                        {% endif %}
+                        {% for i in products.paginator.page_range %}
+                            {% if products.number >= i|add:"-2" and products.number <= i|add:"2"  %}
+                                {% if products.number == i %}
+                                    <a href="?page={{ i }}" class="active">{{ i }}</a>
+                                {% else %}
+                                    <a href="?page={{ i }}">{{ i }}</a>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if products.has_next %}
+                            <a href="?page={{ products.next_page_number }}" class="next-arrow"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+            <!-- End Filter Bar -->
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/nouislider.min.js' %}"></script>
+<script>
+    var toasted = new Toasted({
+        position : 'bottom-center',
+        theme : 'primary',
+        duration:5000,
+        className:'toastClass',
+        fullWidth:true,
+    })
+</script>
+{% if messages %}
+    {% for message in messages %}
+            <script>toasted.show("<span class='toast-content'><span class='fa fa-check-circle' style='color:#55efc4;'></span>&nbsp;&nbsp;{{message}}<span>")</script>
+    {% endfor %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,7 @@
+{% load static %}
+{% load mptt_tags %}
+{% load env_extras %}
+
+{% for node in category %}
+    <option value="{{node.slug}}">{{node.title}}</option>
+{% endfor %}
