@@ -1,7 +1,10 @@
 [phases.setup]
 nixPkgs = ["python313", "gcc", "mysql", "libmysqlclient-dev"]
 
+# Specify a more stable or specific commit of Nixpkgs if necessary
+nixPkgsRepo = "https://github.com/NixOS/nixpkgs/archive/refs/tags/nixos-22.11.tar.gz"
+
 [phases.install]
 cmds = [
-  "python3 -m venv /opt/venv && . /opt/venv/bin/activate && pip install -r requirements.txt"
+  "python3 -m venv /root/venv && . /root/venv/bin/activate && pip install -r requirements.txt"
 ]
