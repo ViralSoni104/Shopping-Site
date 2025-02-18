@@ -1,2 +1,7 @@
 [phases.setup]
-cmds = ["bash build.sh"]
+nixPkgs = ["python313", "gcc", "mysql", "libmysqlclient-dev"]
+
+[phases.install]
+cmds = [
+  "python3 -m venv /opt/venv && . /opt/venv/bin/activate && pip install -r requirements.txt"
+]
