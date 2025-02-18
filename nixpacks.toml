@@ -1,5 +1,2 @@
 [phases.setup]
-nixPkgs = ["python313", "gcc"]
-
-[phases.install]
-cmds = ["python3 -m venv /opt/venv && . /opt/venv/bin/activate && pip install -r requirements.txt"]
+cmds = ["bash build.sh"]
