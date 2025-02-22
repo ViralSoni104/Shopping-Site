@@ -49,7 +49,7 @@ def get_product_details(product_link):
     htmlContent = r.content
     soup = BeautifulSoup(htmlContent,'html.parser')
     # product_title = soup.find('span',attrs={'class':'B_NuCI'}).text
-    product_price = soup.find('div',attrs={'class':'Nx9bqj CxhGGd'}).text
+    product_price = soup.find('div',attrs={'class':'Nx9bqj CxhGGd'}).text.strip()
     product_detail_list = soup.find('img',attrs={'class':'_0DkuPH'})
     product_image  = product_detail_list["src"]
     product_image_data = product_image.split('/')
