@@ -33,7 +33,14 @@ def get_site_setting():
 
 @register.simple_tag
 def get_product_details(product_link):
-    headers = {"User-Agent": "Mozilla/5.0"}
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Referer": "https://www.google.com/",
+        "Connection": "keep-alive",
+        "DNT": "1",  # Do Not Track Request
+    }
     r = requests.get(product_link,headers=headers)
     htmlContent = r.content
     soup = BeautifulSoup(htmlContent,'html.parser')

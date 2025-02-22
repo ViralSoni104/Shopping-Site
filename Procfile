@@ -1,1 +1,1 @@
-gunicorn shop:app
+gunicorn shop.wsgi:app
