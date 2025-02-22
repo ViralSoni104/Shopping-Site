@@ -45,6 +45,8 @@ def get_product_details(product_link):
         "Referer": "https://www.google.com/",
         "Connection": "keep-alive",
     }
+    session = requests.Session()
+    session.headers.update(headers)
     r = requests.get(product_link, headers=headers)
     htmlContent = r.content
     soup = BeautifulSoup(htmlContent,'html.parser')
