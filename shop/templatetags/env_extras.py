@@ -11,7 +11,13 @@ from shop.models import Team
 from django.urls import reverse
 import requests
 from bs4 import BeautifulSoup
+import random
 
+user_agents = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+]
 
 register = template.Library()
 
@@ -34,12 +40,12 @@ def get_site_setting():
 @register.simple_tag
 def get_product_details(product_link):
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "User-Agent": random.choice(user_agents),
         "Accept-Language": "en-US,en;q=0.9",
-        "Accept-Encoding": "gzip, deflate, br",
         "Referer": "https://www.google.com/",
+        "Connection": "keep-alive",
     }
-    r = requests.get(product_link,headers=headers)
+    r = requests.get(product_link, headers=headers)
     htmlContent = r.content
     soup = BeautifulSoup(htmlContent,'html.parser')
     # product_title = soup.find('span',attrs={'class':'B_NuCI'}).text
