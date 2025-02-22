@@ -38,8 +38,6 @@ def get_product_details(product_link):
         "Accept-Language": "en-US,en;q=0.9",
         "Accept-Encoding": "gzip, deflate, br",
         "Referer": "https://www.google.com/",
-        "Connection": "keep-alive",
-        "DNT": "1",  # Do Not Track Request
     }
     r = requests.get(product_link,headers=headers)
     htmlContent = r.content
