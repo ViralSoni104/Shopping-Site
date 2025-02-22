@@ -33,7 +33,8 @@ def get_site_setting():
 
 @register.simple_tag
 def get_product_details(product_link):
-    r = requests.get(product_link)
+    headers = {"User-Agent": "Mozilla/5.0"}
+    r = requests.get(product_link,headers=headers)
     htmlContent = r.content
     soup = BeautifulSoup(htmlContent,'html.parser')
     # product_title = soup.find('span',attrs={'class':'B_NuCI'}).text
