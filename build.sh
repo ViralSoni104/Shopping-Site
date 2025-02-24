@@ -1,12 +1,19 @@
-#!/usr/bin/env bash
-# Exit on error
-set -o errexit
+#!/bin/bash
 
-# Modify this line as needed for your package manager (pip, poetry, etc.)
-pip install -r requirements.txt
+# Exit on any error
+set -o errexit  
 
-# Convert static asset files
-python manage.py collectstatic --no-input
+# Install dependencies
+pip install --upgrade pip  
+pip install -r requirements.txt  
 
-# Apply any outstanding database migrations
-python manage.py migrate
+# Run database migrations
+python manage.py migrate  
+
+# Collect static files
+python manage.py collectstatic --noinput  
+
+# Ensure Gunicorn is installed (for production server)
+pip install gunicorn  
+
+echo "Build completed successfully!"
