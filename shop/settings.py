@@ -91,11 +91,11 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),  # Example: 'containers-us-west-89.railway.app'
-        'PORT': os.getenv('DB_PORT'),  # Example: '3306'
+        'NAME': 'db_zoddok_shop',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',  # Example: 'containers-us-west-89.railway.app'
+        'PORT': '3306',  # Example: '3306'
         'OPTIONS': {
             'ssl_mode': 'REQUIRED',  # ✅ Change 'sslmode' to 'ssl_mode'
         },
