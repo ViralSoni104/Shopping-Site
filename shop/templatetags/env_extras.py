@@ -48,8 +48,11 @@ def get_product_details(product_link):
     session = requests.Session()
     session.headers.update(headers)
     r = requests.get(product_link, headers=headers)
-    htmlContent = r.text    
+    print("r :-",r)
+    htmlContent = r.text  
+    print("htmlContent :-",htmlContent)  
     soup = BeautifulSoup(htmlContent,'html.parser')
+    print("soup :-",soup)
     # product_title = soup.find('span',attrs={'class':'B_NuCI'}).text
     product_price = soup.find('div',attrs={'class':'Nx9bqj CxhGGd'})
     print("Product Price find :- ",product_price)
